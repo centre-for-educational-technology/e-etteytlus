@@ -1,0 +1,92 @@
+@charset "UTF-8";
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
+
+/* structure */
+html, body {
+	height:100%;
+	margin:0;
+	padding:0;
+}
+
+body > * {
+	position:absolute;
+	left:50%;
+	top:50%;
+	transform:translate(-50%, -50%);	
+	transition:left 0.3s, opacity 0.2s;
+	transition-delay:0.3s;
+}
+
+[data-navState="hiddenAfter"], [data-navState="hiddenBefore"], [data-navState="hidden"] {
+	opacity:0;
+	pointer-events:none;
+	transition-delay:0s;
+}
+[data-navState="hiddenAfter"] { left:70%; }
+[data-navState="hiddenBefore"] { left:30%; }
+
+/* Nav */
+#nav {
+	position:fixed;
+	left:15px; top:0px;
+	border-bottom:3px solid rgb(240,240,240);
+	height:34px;
+	transform:none;
+}
+
+#nav > label {
+	box-sizing:border-box;
+	display:inline-block;
+	padding:0px;
+	margin:15px 10px 0 0;
+	font: 14px 'Open Sans';
+	color:rgb(96,96,96);
+	border-bottom:3px solid rgb(240,240,240);
+	transition:border-color 0.2s;
+	cursor:pointer;
+}
+
+#nav > label:last-child {
+	margin-right:0;
+}
+
+#nav label[data-checked] {
+	border-color:rgb(64,128,196);
+}
+
+#nav > label:hover {
+	border-color:rgb(128,180,255);
+}
+
+/* Basic styling */
+h1 {
+	font: 30px 'Open Sans';
+	color:rgb(64,128,196);
+	border-bottom:1px solid rgb(196,196,196);
+}
+
+h2 {
+	font: 14px 'Open Sans';
+	color:rgb(96,96,96);
+}
+
+h3 {
+	font:11px 'Open Sans';
+	color:rgb(128,128,128);
+}
+
+table {
+	width:100%;
+	font:12px 'Open Sans';
+}
+
+th, td {
+	text-align:left;
+	padding:4px;
+}
+
+th {
+	font-weight:650;
+	background-color:rgb(220,220,220);
+	
+}

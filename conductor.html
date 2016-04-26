@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>E-etteütlus</title>
+		<meta charset="UTF-8"> 	
+		<link rel="stylesheet" href="general.css">
+		<link rel="stylesheet" href="form.css">
+		<link rel="stylesheet" href="conductor.css">
+		<script src="util.js" charset="utf-8"></script>
+		<script src="nav.js" charset="utf-8"></script>
+		<script src="form.js" charset="utf-8"></script>
+		<script src="table.js" charset="utf-8"></script>
+		<script src="conductor.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- Nav -->
+		<div id="nav">		
+			<label data-navFor="textList">Kontrolltekstid</label>
+			<label data-navFor="testList">Etteütlused</label>	
+			<label data-navFor="newText1")>Uus Kontrolltekst</label>
+			<label data-navFor="newTest")>Uus Etteütlus</label>
+		</div>
+		
+		<!-- Text list -->
+		<div id="textList" data-nav="textList">
+			<h1>Kontrolltekstid</h1>	
+			<table data-table="textList">
+				<tr>
+					<th data-tableColumn="title">Pealkiri</th>
+					<th data-tableColumn="authorName">Autor</th>
+					<th data-tableColumn="text">Tekst</th>
+				</tr>
+			</table>
+		</div>
+		
+		<!-- Test list -->
+		<div id="testList" data-nav="testList">
+			<h1>Etteütlused</h1>
+		</div>
+		
+		<!-- New text -->
+		<div id="newText" data-nav="newText1">
+			<h1>Lisa uus kontrolltekst</h1>
+			<form onsubmit="submitText(event);">
+				<label for="ntxTitle">Pealkiri (ei kuvata vastajatele)</label>
+				<input  type="text" id="ntxTitle" name="title" data-pattern=".{3,}" autocomplete="off" required>
+				<label for="ntxText">Kontrolltekst</label>
+				<textarea name="text" id="ntxText" data-pattern=".{3,}" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>	
+				<button type="submit">Salvesta</button>
+				<button type="reset">Tühista</button>
+			</form>
+			<button onclick='navigate("newText2"); navigateAuto(2000, "textList");' type="button">hai</button>
+		</div>
+		
+		<div data-nav="newText2">
+			<h1>Kontrolltekst lisatud</h1>		
+		</div>
+	
+		<!-- New test -->
+		<div id="newTest" data-nav="newTest">
+			<h1>Alusta uut etteütlust</h1>
+			<form onsubmit="submitNewTest(event);" data-nav="step1">
+				<label for="ntsTextName">Etteütluse tekst</label>
+				<select id="ntsTextName" name="name" autocomplete="off" required>
+					<option>Opt 1</option>
+					<option>Opt 2</option>
+					<option>...</option>
+				</select>
+				<label for="ntsPass">Läbisaamise protsent</label>
+				<select id="ntsPass" name="percentage" autocomplete="off" required>
+					<option value="1">Opt 1</option>
+					<option value="2">Opt 2</option>
+					<option>...</option>
+				</select>
+				<button type="submit">Genereeri kood</button>
+			</form>
+		</div>		
+
+		<script>navigate('testList');</script>
+	</body>
+</html>

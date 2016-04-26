@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+/* IO specific styling */
+
+
+
+/* input, textarea */
+input, textarea, select {	
+	display:block;
+	width:100%;
+	padding:4px;
+	margin-bottom:10px;
+	box-sizing:border-box;
+	
+	font:12px 'Open Sans';
+	box-shadow:none;
+	border:1px solid rgb(196,196,196);
+	border-radius:2px;
+	transition:border-color 0.3s;
+} 
+textarea {
+	resize:none;
+}
+input[data-invalid], textarea[data-invalid] {
+	border-color:rgb(255,64,64);
+} 
+input[data-empty], textarea[data-empty] {
+	border-color:rgb(196,196,196);
+} 
+input[data-hover], input[data-focus], textarea[data-hover], textarea[data-focus] {
+	border-color:rgb(64,128,196);
+} 
+input[data-valid], textarea[data-valid]{
+	border-color:rgb(64,196,128);
+}
+
+label {
+	display:block;
+	font:600 14px 'Open Sans';
+	color:rgb(64,64,64);
+	line-height:24px;
+	transition:color 0.3s;
+} 
+label[data-invalid] {
+	color:rgb(255,64,64);
+} 
+label[data-empty] {
+	color:rgb(64,64,64);
+} 
+label[data-hover], label[data-focus]{	
+	color:rgb(64,128,196);
+} 
+label[data-valid] {
+	color:rgb(64,196,128);
+}
+
+button {
+	border-style:none;
+	font:600 14px 'Open Sans';
+	color:white;
+	padding:5px;
+	margin-top:10px;
+	background-color:rgb(112, 180, 255);
+	cursor:pointer;
+	border-radius:4px;
+	display:inline-block;
+	float:right;
+	margin-left:10px;
+} button:hover {
+	background-color:rgb(160, 220, 245);
+}
+
+button[type="reset"] {
+	background-color:rgb(255,128,128);
+} button[type="reset"]:hover {
+	background-color:rgb(255,180,180);
+}

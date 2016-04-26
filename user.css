@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+/* user side specific */
+#userInfo {
+	width:400px;
+}
+
+#dictation {
+	width:800px;
+}
+
+#complete {
+	text-align:center;
+	width:300px;
+}

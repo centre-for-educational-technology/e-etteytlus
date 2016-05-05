@@ -18,9 +18,9 @@
 		
 		//Levenshtein distance, based on Wagner-Fischer algorithm
 		//with php friendly matrix storage and backwards tracing to get the optimal edit sequence
-		public static function compute($mysqlitrol, $sample, &$edits) {	
+		public static function compute($control, $sample, &$edits) {	
 			$width = mb_strlen( $sample, 'UTF-8');			
-			$height = mb_strlen( $mysqlitrol, 'UTF-8');
+			$height = mb_strlen( $control, 'UTF-8');
 			$matrix = new SplFixedArray($height);												//Used to store the matrix
 			$prevRow = range(0, $width);														//Initial row
 
@@ -29,7 +29,7 @@
 				$currentRow[0] = $y + 1;		
 				$mRow = ""; 																	//Matrix row temporary
 				$mVal = 0;																		//Matrix column temporary
-				$cSample = mb_substr( $mysqlitrol, $y, 1, 'UTF-8') ;								//Sample char
+				$cSample = mb_substr( $control, $y, 1, 'UTF-8') ;								//Sample char
 				for ($x = 0; $x < $width; $x++) {												//For each column
 					$cControl = mb_substr( $sample, $x, 1, 'UTF-8' );							//Control char
 					$insert = $prevRow[$x+1] + 1;												//Insertion cost

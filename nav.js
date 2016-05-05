@@ -23,9 +23,11 @@ function getNavHierarchy(el) {
 	return ret;
 }
 
+//navigates between various static elements
 function navigate() {			
-	let rootEl = select('[data-nav="' + arguments[0] + '"]');																	//navigates between various static elements
-	let root = getNavHierarchy(rootEl.parentNode)[arguments[0]];																//pushing nav siblings to left/right according to dom order
+	let el = select('[data-nav="' + arguments[0] + '"]').parentNode;																	
+	while (el.parentNode && !el.hasAttribute("data-nav")) el = el.parentNode;
+	let root = getNavHierarchy(el)[arguments[0]];		
 	let node = undefined;
 	for (let i = 0; i < arguments.length; i++) {
 		node = node ? node.childNodes[arguments[i]] : root;

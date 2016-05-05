@@ -15,40 +15,46 @@
 	<body>
 	
 		<!-- step 1 -->
-		<div id="userInfo" data-nav="step1">
-			<h1>E-etteütlus</h1>			
-			<h3>Täida palun kõik väljad!</h3>
-			<form onsubmit="submitUserInfo(event);">
-				<label for="firstname">Eesnimi</label>
-				<input  type="text" id="firstname" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required autofocus>
-				<label for="surname">Perenimi</label>
-				<input  type="text" id="surname" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
-				<label for="email">E-posti aadress</label>
-				<input  type="email" id="email" name="email" data-pattern=".@." autocomplete="off" required>
-				<label for="code">Etteütluse kood</label>
-				<input  type="text" id="code" name="code" data-pattern="^[0-9]{4}" autocomplete="off" required>
-				<button type="submit">Alusta</button>
-			</form>				
-		</div>	
+		<div class="container" data-nav="step1">
+			<div id="userInfo">
+				<h1>E-etteütlus</h1>			
+				<h3>Täida palun kõik väljad!</h3>
+				<form onsubmit="submitUserInfo(event);">
+					<label for="firstname">Eesnimi</label>
+					<input  type="text" id="firstname" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required autofocus>
+					<label for="surname">Perenimi</label>
+					<input  type="text" id="surname" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
+					<label for="email">E-posti aadress</label>
+					<input  type="email" id="email" name="email" data-pattern=".@." autocomplete="off" required>
+					<label for="code">Etteütluse kood</label>
+					<input  type="text" id="code" name="code" data-pattern="^[0-9]{4}" autocomplete="off" required>
+					<button type="submit">Alusta</button>
+				</form>				
+			</div>	
+		</div>
 		
 		<!-- step 2 -->
-		<div id="dictation" data-nav="step2">
-			<h1>Juhan Juurikas 28.07.2016 13:30 #1234</h1>
-			<h2>Et siis nagu käib nii, et ää.. teed nii nagu õpetaja ütleb! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </h2>
+		<div class="container" data-nav="step2">
+			<div id="dictation">
+				<h1>Juhan Juurikas 28.07.2016 13:30 #1234</h1>
+				<h2>Et siis nagu käib nii, et ää.. teed nii nagu õpetaja ütleb! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </h2>
 
-			<form onsubmit="submitDictation(event);">
-				<textarea rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-pattern=".{3,}" required></textarea>
-				<button type="submit">Saada tekst</button>
-			</form>
+				<form onsubmit="submitDictation(event);">
+					<textarea rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-pattern=".{3,}" required></textarea>
+					<button type="submit">Saada tekst</button>
+				</form>
+			</div>
 		</div>
 		
 		<!-- step 3 -->
-		<div id="complete" data-nav="step3">
-			<h1>Etteütlus sooritatud!</h1>
-			<h2>Täname osalemise eest.</h2>
+		<div class="container" data-nav="step3">
+			<div id="complete">
+				<h1>Etteütlus sooritatud!</h1>
+				<h2>Täname osalemise eest.</h2>
+			</div>
 		</div>
 		
-		<script>navigate("step1");</script>
+		<script type="text/javascript">navigate("step1");</script>
 	</body>
 </html>
 

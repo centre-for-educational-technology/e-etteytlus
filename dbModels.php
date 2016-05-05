@@ -101,7 +101,7 @@
 		)")) return "Failed to create text table. " . $dbi->mysqli->error;
 		
 		if (!$dbi->mysqli->query("CREATE TABLE " . test::$table_name . " (
-			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			id INT NOT NULL AUTO_INCREMENT = 1000 PRIMARY KEY,
 			conductorId INT,
 			conductorName VARCHAR(128),
 			textId INT,

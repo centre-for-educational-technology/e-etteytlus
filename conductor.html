@@ -12,70 +12,101 @@
 		<script src="table.js" charset="utf-8"></script>
 		<script src="conductor.js" charset="utf-8"></script>
 	</head>
-	<body>
+	<body>	
+		<!-- Text list -->
+		<div class="container" data-nav="textList">
+			<div id="textList" >
+				<h1>Kontrolltekstid</h1>	
+				<table data-table="textList">
+					<tr>
+						<th data-tableColumn="title" data-tableOnClick="viewTextDetail">Pealkiri</th>
+						<th data-tableColumn="authorName">Autor</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="container" data-nav="textDetail">
+			<div id="textDetail">
+				<h1 id="textDetailTitle"></h1>
+				<h3 id="textDetailAuthor"></h3>
+				<h2 id="textDetailText"></h2>
+				<button type="button" onclick="deleteText();">Kustuta</button>
+			</div>
+		</div>
+		
+		<!-- Test list -->
+		<div class="container" data-nav="testList">
+			<div id="testList" >
+				<h1>Etteütlused</h1>
+					<table data-table="testList">
+					<tr>
+						<th data-tableColumn="id" data-tableOnClick="viewTestDetail">Kood</th>
+						<th data-tableColumn="conductorName">Juhendaja</th>
+						<th data-tableColumn="textName">Tekst</th>
+						<th data-tableOnLoad="testItemStatus">Staatus</th>
+						<th data-tableColumn="submissions">Vastused</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<!-- New text -->
+		<div class="container" data-nav="newText1">
+			<div id="newText" >
+				<h1>Lisa uus kontrolltekst</h1>
+				<form onsubmit="submitText(event);">
+					<label for="ntxTitle">Pealkiri (ei kuvata vastajatele)</label>
+					<input  type="text" id="ntxTitle" name="title" data-pattern=".{3,}" autocomplete="off" required>
+					<label for="ntxText">Kontrolltekst</label>
+					<textarea name="text" id="ntxText" data-pattern=".{3,}" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>	
+					<button type="submit">Salvesta</button>
+					<button type="reset">Tühista</button>
+				</form>
+			</div>
+		</div>
+		
+		<div class="container" data-nav="newText2">
+			<div >
+				<h1>Kontrolltekst lisatud</h1>		
+			</div>
+		</div>
+	
+		<!-- New test -->
+		<div class="container" data-nav="newTest">
+			<div id="newTest" >
+				<h1>Alusta uut etteütlust</h1>
+				<form onsubmit="submitNewTest(event);" data-nav="step1">
+					<label for="ntsTextName">Etteütluse tekst</label>
+					<select id="ntsTextName" name="name" autocomplete="off" required></select>
+					<label for="ntsDuration">Lubatud aeg minutites</label>
+					<input type="text" name="duration" value="30">
+					<button type="submit">Genereeri kood</button>
+				</form>
+			</div>		
+		</div>
+		
+		<div class="container" data-nav="newTest2">
+			<div id="newTest2">
+				<h1>E-etteütlus<span id="nts2Name"></span></h1>
+				Etteütluse kood on ekraani peal kuvatav neljakohaline number. Etteütluse sooritamiseks peab osavõtja sisestama koodi. Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span id="nts2Time"></span>) lõpuni.
+				
+				Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.
+				
+				<h1 id="nts2Code"></h1>
+				<button type="submit">Alusta</button>
+				<button type="reset">Tühista</button>
+			</div>
+		</div>
+		
 		<!-- Nav -->
 		<div id="nav">		
 			<label data-navFor="textList">Kontrolltekstid</label>
 			<label data-navFor="testList">Etteütlused</label>	
-			<label data-navFor="newText1")>Uus Kontrolltekst</label>
-			<label data-navFor="newTest")>Uus Etteütlus</label>
+			<label data-navFor="newText1">Uus Kontrolltekst</label>
+			<label data-navFor="newTest">Uus Etteütlus</label>
 		</div>
-		
-		<!-- Text list -->
-		<div id="textList" data-nav="textList">
-			<h1>Kontrolltekstid</h1>	
-			<table data-table="textList">
-				<tr>
-					<th data-tableColumn="title">Pealkiri</th>
-					<th data-tableColumn="authorName">Autor</th>
-					<th data-tableColumn="text">Tekst</th>
-				</tr>
-			</table>
-		</div>
-		
-		<!-- Test list -->
-		<div id="testList" data-nav="testList">
-			<h1>Etteütlused</h1>
-		</div>
-		
-		<!-- New text -->
-		<div id="newText" data-nav="newText1">
-			<h1>Lisa uus kontrolltekst</h1>
-			<form onsubmit="submitText(event);">
-				<label for="ntxTitle">Pealkiri (ei kuvata vastajatele)</label>
-				<input  type="text" id="ntxTitle" name="title" data-pattern=".{3,}" autocomplete="off" required>
-				<label for="ntxText">Kontrolltekst</label>
-				<textarea name="text" id="ntxText" data-pattern=".{3,}" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>	
-				<button type="submit">Salvesta</button>
-				<button type="reset">Tühista</button>
-			</form>
-			<button onclick='navigate("newText2"); navigateAuto(2000, "textList");' type="button">hai</button>
-		</div>
-		
-		<div data-nav="newText2">
-			<h1>Kontrolltekst lisatud</h1>		
-		</div>
-	
-		<!-- New test -->
-		<div id="newTest" data-nav="newTest">
-			<h1>Alusta uut etteütlust</h1>
-			<form onsubmit="submitNewTest(event);" data-nav="step1">
-				<label for="ntsTextName">Etteütluse tekst</label>
-				<select id="ntsTextName" name="name" autocomplete="off" required>
-					<option>Opt 1</option>
-					<option>Opt 2</option>
-					<option>...</option>
-				</select>
-				<label for="ntsPass">Läbisaamise protsent</label>
-				<select id="ntsPass" name="percentage" autocomplete="off" required>
-					<option value="1">Opt 1</option>
-					<option value="2">Opt 2</option>
-					<option>...</option>
-				</select>
-				<button type="submit">Genereeri kood</button>
-			</form>
-		</div>		
 
-		<script>navigate('testList');</script>
+		<script type="text/javascript">navigate('testList');</script>
 	</body>
 </html>

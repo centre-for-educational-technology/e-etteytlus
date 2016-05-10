@@ -1,7 +1,7 @@
 //text
 function submitText(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("submitText", data, function(r) {
 		if (r.result == "success") {
 			uiTextPush(r.arg);
@@ -14,7 +14,7 @@ function submitText(e) {
 
 function deleteText(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("deleteText", data, function(r) {
 		if (r.result == "success") {
 			uiTextPopById(data.id);
@@ -34,8 +34,8 @@ function viewText(item) {
 
 function uiTextPush(item) {
 	//add item to select in 'new test'
-	let ntsTextNameSelect = select("#ntsTextName");	
-	let opt = document.createElement("option");
+	var ntsTextNameSelect = select("#ntsTextName");	
+	var opt = document.createElement("option");
 	opt.value = item.id;
 	opt.innerHTML = item.title;
 	ntsTextNameSelect.appendChild(opt);
@@ -46,9 +46,9 @@ function uiTextPush(item) {
 
 function uiTextPopById(id) {
 	//remove item from select in 'new test'
-	let ntsTextNameSelect = select("#ntsTextName");
-	let opts = ntsTextNameSelect.childNodes;
-	for (let i = 0; i < opts.length; i++) {
+	var ntsTextNameSelect = select("#ntsTextName");
+	var opts = ntsTextNameSelect.childNodes;
+	for (var i = 0; i < opts.length; i++) {
 		if (opts[i].value == id) {
 			ntsTextNameSelect.removeChild(opts[i]);
 			break;
@@ -63,7 +63,7 @@ function uiTextPopById(id) {
 
 function submitTest(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("submitTest", data, function(r) {
 		if (r.result == "success") {
 			uiTestPush(r.arg);
@@ -75,7 +75,7 @@ function submitTest(e) {
 
 function startTest(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("startTest", data, function(r) {
 		if (r.result == "success") {
 			uiTestPopById(r.arg.id);
@@ -87,7 +87,7 @@ function startTest(e) {
 
 function stopTest(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("stopTest", data, function(r) {
 		if (r.result == "success") {
 			uiTestPopById(r.arg.id);
@@ -122,7 +122,7 @@ function viewTest(item) {
 
 function deleteTest(e) {
 	e.preventDefault();
-	let data = formData(e.target);
+	var data = formData(e.target);
 	ajax("deleteTest", data, function(r) {
 		if (r.result == "success") {
 			uiTestPopById(data.id);
@@ -169,7 +169,7 @@ onLoad(function(){
 	//initially load all texts
 	ajax("getTextList", {}, function(r) {
 		if (r.result == "success") {
-			for (let i = 0; i < r.arg.length; i++) {
+			for (var i = 0; i < r.arg.length; i++) {
 				uiTextPush(r.arg[i]);
 			}
 		}
@@ -177,7 +177,7 @@ onLoad(function(){
 	
 	ajax("getTestList", {}, function(r) {
 		if (r.result == "success") {
-			for (let i = 0; i < r.arg.length; i++) {
+			for (var i = 0; i < r.arg.length; i++) {
 				uiTestPush(r.arg[i]);
 			}
 		}

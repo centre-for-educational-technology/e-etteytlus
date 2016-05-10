@@ -1,9 +1,9 @@
 //table management thing
 
 
-let tables = {};
+var tables = {};
 
-let tableManager = function(el) {
+var tableManager = function(el) {
 	this.el = el;
 	this.name = el.getAttribute("data-table");
 	this.items = [];
@@ -17,18 +17,18 @@ let tableManager = function(el) {
 	}
 	
 	//get tracked columns
-	let headers = this.el.querySelectorAll("th");
-	for (let i = 0; i < headers.length; i++) {
-		let header = headers[i];
+	var headers = this.el.querySelectorAll("th");
+	for (var i = 0; i < headers.length; i++) {
+		var header = headers[i];
 		if (header.hasAttribute("data-table-column")) { 
 			this.columns.push(header.getAttribute("data-table-column"));
 		}
 	}
 	
 	this.push = function(item) {
-		let tr = document.createElement("tr");
-		for (let i = 0; i < this.columns.length; i++) {
-			let td = document.createElement("td");
+		var tr = document.createElement("tr");
+		for (var i = 0; i < this.columns.length; i++) {
+			var td = document.createElement("td");
 			td.innerHTML = item[this.columns[i]];
 			tr.appendChild(td);
 		}
@@ -40,8 +40,8 @@ let tableManager = function(el) {
 	}.bind(this);
 	
 	this.popById = function(id) {
-		let item = undefined;
-		for (let i = 0; i < this.items.length; i++) {
+		var item = undefined;
+		for (var i = 0; i < this.items.length; i++) {
 			if (this.items[i].id == id) {
 				item = this.items[i];
 				break;
@@ -49,16 +49,16 @@ let tableManager = function(el) {
 		}
 		if (!isdef(item)) return;
 	
-		let idx = this.items.indexOf(item);
+		var idx = this.items.indexOf(item);
 		this.items.splice(idx, 1);
 		this.el.removeChild(item["el-" + this.name]);
 	}.bind(this);
 };
 
 onLoad(function(){
-	let tableCapable = document.querySelectorAll("[data-table]");
-	for (let i = 0; i < tableCapable.length; i++) {
-		let table = new tableManager(tableCapable[i]);
+	var tableCapable = document.querySelectorAll("[data-table]");
+	for (var i = 0; i < tableCapable.length; i++) {
+		var table = new tableManager(tableCapable[i]);
 		tables[table.name] = table;
 	}
 });

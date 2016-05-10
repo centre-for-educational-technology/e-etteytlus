@@ -100,13 +100,28 @@
 	//test model
 	class test extends base {
 		public static $table_name = "tests";
-		public $id, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public;
+		public $id, $code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public;
 		
-		public static function fromValues($conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
+		public static function fromValuesWithCode($code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
 			$ret = new static;
-			$ret->conductorId = $conductorId; $ret->conductorName = $conductorName; $ret->textId = $textId; $ret->textName = $textName; 
+			$ret->code = $code; $ret->conductorId = $conductorId; $ret->conductorName = $conductorName; $ret->textId = $textId; $ret->textName = $textName; 
 			$ret->dateBegin = $dateBegin; $ret->dateEnd = $dateEnd; $ret->submissions = $submissions; $ret->public = $public;
 			return $ret;
+		}
+		
+		public static function fromValues($conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
+			global $dbi;
+			
+			//brute force seek unique code
+			$foundCode = false;
+			$code = NULL;
+			while (!$foundCode) {
+				$code = "" . rand(0, 9999);
+				$selResult = static::dbSelect(array("code"=>$code), $results);
+				if (count($results) == 0) $foundCode = true;
+			}
+			
+			return static::fromValuesWithCode($code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public);
 		}
 	}
 	
@@ -139,6 +154,7 @@
 		
 		if (!$dbi->query("CREATE TABLE " . test::$table_name . " (
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			code CHAR(4),
 			conductorId INT,
 			conductorName VARCHAR(255),
 			textId INT,

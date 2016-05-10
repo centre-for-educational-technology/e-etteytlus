@@ -108,7 +108,7 @@ function navigateConductTest(test) {
 function navigateStartTest(test) {
 	select("#startTestTextName").innerHTML = test.textName;
 	select("#startTestDurationMin").innerHTML = test.dateEnd;
-	select("#startTestId").innerHTML = pad0(test.id, 4);
+	select("#startTestCode").innerHTML = test.code;
 	select("#startTestId2").value = test.id;
 	navigate("startTest");
 }
@@ -142,9 +142,6 @@ function checkTest(item) {
 }
 
 function uiTestPush(item) {
-	//generate code
-	item["code"] = pad0(item.id, 4);
-
 	//generate status
 	item["status"] = "NaN";
 	if (item.dateBegin == 0) {

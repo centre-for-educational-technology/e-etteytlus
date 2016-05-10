@@ -17,21 +17,34 @@
 		<div class="container" data-nav="textList">
 			<div id="textList" >
 				<h1>Kontrolltekstid</h1>	
-				<table data-table="textList">
+				<table data-table="textList" data-table-onRowClick="viewText">
 					<tr>
-						<th data-tableColumn="title" data-tableOnClick="viewTextDetail">Pealkiri</th>
-						<th data-tableColumn="authorName">Autor</th>
+						<th data-table-column="title">Pealkiri</th>
+						<th data-table-column="authorName">Autor</th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
+		<!-- Text detail -->
 		<div class="container" data-nav="textDetail">
 			<div id="textDetail">
 				<h1 id="textDetailTitle"></h1>
 				<h3 id="textDetailAuthor"></h3>
 				<h2 id="textDetailText"></h2>
-				<button type="button" onclick="deleteText();">Kustuta</button>
+				
+				<form onsubmit="deleteText(event);">
+					<input id="textDetailId" type="hidden" name="id">
+					<button type="submit">Kustuta</button>
+				</form>
+				
+			</div>
+		</div>
+		
+		<!-- Msg: text delete -->
+		<div class="container" data-nav="msgTextDeleted">
+			<div >
+				<h1>Kontrolltekst kustutatud</h1>		
 			</div>
 		</div>
 		
@@ -39,13 +52,13 @@
 		<div class="container" data-nav="testList">
 			<div id="testList" >
 				<h1>Etteütlused</h1>
-					<table data-table="testList">
+					<table data-table="testList" data-table-onRowClick="viewTest">
 					<tr>
-						<th data-tableColumn="id" data-tableOnClick="viewTestDetail">Kood</th>
-						<th data-tableColumn="conductorName">Juhendaja</th>
-						<th data-tableColumn="textName">Tekst</th>
-						<th data-tableOnLoad="testItemStatus">Staatus</th>
-						<th data-tableColumn="submissions">Vastused</th>
+						<th data-table-column="code">Kood</th>
+						<th data-table-column="conductorName">Juhendaja</th>
+						<th data-table-column="textName">Tekst</th>
+						<th data-table-column="status">Staatus</th>
+						<th data-table-column="submissions">Vastused</th>
 					</tr>
 				</table>
 			</div>
@@ -66,7 +79,8 @@
 			</div>
 		</div>
 		
-		<div class="container" data-nav="newText2">
+		<!-- Msg: text add -->
+		<div class="container" data-nav="msgTextAdded">
 			<div >
 				<h1>Kontrolltekst lisatud</h1>		
 			</div>
@@ -76,26 +90,63 @@
 		<div class="container" data-nav="newTest">
 			<div id="newTest" >
 				<h1>Alusta uut etteütlust</h1>
-				<form onsubmit="submitNewTest(event);" data-nav="step1">
+				<form onsubmit="submitTest(event);" data-nav="step1">
 					<label for="ntsTextName">Etteütluse tekst</label>
-					<select id="ntsTextName" name="name" autocomplete="off" required></select>
+					<select id="ntsTextName" name="textId" autocomplete="off" required></select>
 					<label for="ntsDuration">Lubatud aeg minutites</label>
-					<input type="text" name="duration" value="30">
+					<input type="text" data-pattern="^(0|[1-9][0-9]*)$" name="duration" value="30" required>
 					<button type="submit">Genereeri kood</button>
 				</form>
 			</div>		
 		</div>
 		
-		<div class="container" data-nav="newTest2">
-			<div id="newTest2">
-				<h1>E-etteütlus<span id="nts2Name"></span></h1>
-				Etteütluse kood on ekraani peal kuvatav neljakohaline number. Etteütluse sooritamiseks peab osavõtja sisestama koodi. Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span id="nts2Time"></span>) lõpuni.
+		<!-- Start test -->
+		<div class="container" data-nav="startTest">
+			<div id="startTest">
+				<h1>E-etteütlus "<span id="startTestTextName"></span>"</h1>
 				
-				Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.
+				<ul>
+					<li>Etteütluse kood on ekraani peal kuvatav neljakohaline number.</li>
+					<li>Etteütluse sooritamiseks peab osavõtja sisestama koodi.</li>
+					<li>Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span id="startTestDurationMin"></span> Min) lõpuni.</li>
+					<li>Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.</li>		
+				</ul>
 				
-				<h1 id="nts2Code"></h1>
-				<button type="submit">Alusta</button>
-				<button type="reset">Tühista</button>
+				<h4 id="startTestId"></h1>
+				
+				<form onreset="deleteTest(event);" onsubmit="startTest(event);">
+					<input id="startTestId2" type="hidden" name="id">
+					<button type="reset">Tühista</button>
+					<button type="submit">Alusta</button>
+				</form>
+				
+			</div>
+		</div>
+		
+		<!-- Conduct test -->
+		<div class="container" data-nav="conductTest">
+			<div id="conductTest">
+				<h1>E-etteütlus "<span id="conductTestTextName"></span>" hetkel toimumas</h1>
+				<h4 id="conductTestCountdown" data-countdown-end="0"></h4>
+				
+				<form onsubmit="stopTest(event);">
+					<input id="conductTestId" type="hidden" name="id">
+					<button type="submit">Lõpeta</button>
+				</form>
+			</div>
+		</div>
+		
+		<!-- Msg: test delete -->
+		<div class="container" data-nav="msgTestDeleted">
+			<div >
+				<h1>Etteütlus kustutatud</h1>		
+			</div>
+		</div>
+		
+		<!-- Msg: test ended -->
+		<div class="container" data-nav="msgTestEnded">
+			<div >
+				<h1>Etteütlus lõppenud</h1>		
 			</div>
 		</div>
 		

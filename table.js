@@ -9,40 +9,49 @@ let tableManager = function(el) {
 	this.items = [];
 	this.columns = [];
 	
+	
+	//get event handlers
+	this.onRowClick = function() {};
+	if (el.hasAttribute("data-table-onRowClick")) {
+		eval("this.onRowClick = " + el.getAttribute("data-table-onRowClick"));
+	}
+	
 	//get tracked columns
 	let headers = this.el.querySelectorAll("th");
 	for (let i = 0; i < headers.length; i++) {
 		let header = headers[i];
-		if (header.hasAttribute("data-tableColumn")) {
-			let col = { "name":header.getAttribute("data-tableColumn") };
-			if (header.hasAttribute("data-tableOnClick")) col["onClick"] = header.getAttribute("data-tableOnClick");
-			this.columns.push(col);
+		if (header.hasAttribute("data-table-column")) { 
+			this.columns.push(header.getAttribute("data-table-column"));
 		}
 	}
 	
 	this.push = function(item) {
-		let tableItem = {data:item};
 		let tr = document.createElement("tr");
 		for (let i = 0; i < this.columns.length; i++) {
-			let col = this.columns[i];
-			let colAtt = this.columns[i].name;
-			tableItem[colAtt] = item[colAtt];
 			let td = document.createElement("td");
-			let content = document.createTextNode(item[colAtt]);
-			if (col.onClick) {
-				let inner = content;
-				content = document.createElement("a");
-				content.href = "javascript:;";
-				content.appendChild(inner);
-				content.addEventListener("mouseup", function() {
-					eval(col.onClick + "(" + JSON.stringify(item) + ")");
-				});
-			}
-			td.appendChild(content);
+			td.innerHTML = item[this.columns[i]];
 			tr.appendChild(td);
 		}
 		this.el.appendChild(tr);
+		item["el-" + this.name] = tr;
 		this.items.push(item);
+		
+		tr.addEventListener("mouseup", function() { this.onRowClick(item); }.bind(this) );
+	}.bind(this);
+	
+	this.popById = function(id) {
+		let item = undefined;
+		for (let i = 0; i < this.items.length; i++) {
+			if (this.items[i].id == id) {
+				item = this.items[i];
+				break;
+			}
+		}
+		if (!isdef(item)) return;
+	
+		let idx = this.items.indexOf(item);
+		this.items.splice(idx, 1);
+		this.el.removeChild(item["el-" + this.name]);
 	}.bind(this);
 };
 

@@ -132,6 +132,18 @@ function deleteTest(e) {
 	});
 }
 
+function cancelTest(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	ajax("deleteTest", data, function(r) {
+		if (r.result == "success") {
+			uiTestPopById(data.id);
+			navigate("msgTestCancelled");
+			navigateAuto(2000, "testList");
+		}
+	});
+}
+
 function checkTest(item) {
 	ajax("getTestById", {"id":item.id}, function(r) {
 		if (r.result == "success") {

@@ -114,7 +114,7 @@
 				
 				<h4 id="startTestCode"></h1>
 				
-				<form onreset="deleteTest(event);" onsubmit="startTest(event);">
+				<form onreset="cancelTest(event);" onsubmit="startTest(event);">
 					<input id="startTestId2" type="hidden" name="id">		
 					<button type="submit">Alusta</button>
 					<button type="reset">Tühista</button>
@@ -140,6 +140,13 @@
 		<div class="container" data-nav="msgTestDeleted">
 			<div >
 				<h1>Etteütlus kustutatud</h1>		
+			</div>
+		</div>
+		
+		<!-- Msg: test cancelled -->
+		<div class="container" data-nav="msgTestCancelled">
+			<div >
+				<h1>Etteütlus tühistatud</h1>		
 			</div>
 		</div>
 		

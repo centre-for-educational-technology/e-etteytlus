@@ -25,11 +25,12 @@ function submitDictation(e) {
 	if (!formVerify(e.target)) return;
 	var data = formData(e.target);
 	submissionData["text"] = data.text;
-	
+	navigate("step25");
 	ajax("finishSubmission", submissionData, function(r) {
 		if (r.result == "success") {		
 			navigate("step3");
 		}
 	});
+	
 	
 }

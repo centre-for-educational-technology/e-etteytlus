@@ -57,12 +57,14 @@
 	//test submission model
 	class submission extends base {
 		public static $table_name = "submissions";
-		public $id, $firstname, $surname, $email, $date, $testId, $textId, $text, $errors;
+		public $id, $firstname, $surname, $email, $date, $testId, $textId, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters;
 		
-		public static function fromValues($firstname, $surname, $email, $date, $testId, $textId, $text, $errors) {
+		public static function fromValues($firstname, $surname, $email, $date, $testId, $textId, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters) {
 			$ret = new static;
 			$ret->firstname = $firstname; $ret->surname = $surname; $ret->email = $email; $ret->date = $date; 
-			$ret->testId = $testId; $ret->textId = $textId; $ret->text = $text; $ret->errors = $errors;
+			$ret->testId = $testId; $ret->textId = $textId; $ret->report = $report;
+			$ret->totalSentences = $totalSentences; $ret->totalWords = $totalWords; $ret->totalLetters = $totalLetters;
+			$ret->faultySentences = $faultySentences; $ret->faultyWords = $faultyWords; $ret->faultyLetters = $faultyLetters;
 			return $ret;
 		}
 	}
@@ -109,16 +111,23 @@
 			return $ret;
 		}
 		
+		public static function dbGetByCode($code, &$resultValue) {
+			$result = static::dbSelect(array("code"=>$code), $results);
+			if (count($results) == 0) $resultValue = NULL;
+			else $resultValue = $results[0];
+			return $result;
+		}
+		
 		public static function fromValues($conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
 			global $dbi;
 			
 			//brute force seek unique code
-			$foundCode = false;
-			$code = NULL;
-			while (!$foundCode) {
-				$code = "" . rand(0, 9999);
-				$selResult = static::dbSelect(array("code"=>$code), $results);
-				if (count($results) == 0) $foundCode = true;
+			$code = "" . rand(1000, 9999);
+			static::dbGetByCode($code, $test);
+			
+			while ($test != NULL) {
+				$code = "" . rand(1000, 9999);
+				static::dbGetByCode($code, $test);		
 			}
 			
 			return static::fromValuesWithCode($code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public);
@@ -154,7 +163,7 @@
 		
 		if (!$dbi->query("CREATE TABLE " . test::$table_name . " (
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-			code CHAR(4),
+			code CHAR(4) UNIQUE,
 			conductorId INT,
 			conductorName VARCHAR(255),
 			textId INT,
@@ -173,8 +182,13 @@
 			date INT,
 			testId INT,
 			textId INT,
-			text TEXT,
-			errors TEXT	
+			report TEXT,
+			totalSentences INT,
+			totalWords INT,
+			totalLetters INT,
+			faultySentences INT,
+			faultyWords INT,
+			faultyLetters INT
 		)")) return "Failed to create submission table. " . $dbi->mysqli->error;
 		
 		return "Deployed successfully";

@@ -1,5 +1,6 @@
 <?php header('charset=utf-8', 'Content-Type: text/plain');
 	require('dbModels.php');
+	require('levenshtein2.php');
 	$current_user = user::fromValues("default", "mc'defaultface", "i prefer gmail", "meh", "keyyboardSMASHIJIRU!", "false");
 	
 	//generic return handler
@@ -79,6 +80,29 @@
 		$result = test::dbGetById($args->id, $test);
 		echoResult($result, $test);
 	}
+	
+	function startSubmission() {
+		global $args;
+		$testResult = test::dbGetByCode($args->code, $test);
+		//maybe add more elaborate return values here?
+		if ($test == NULL || $test->dateBegin == 0 || $test->dateEnd < time()) { 
+			echoResult(db_error); 
+			exit; 
+		}
+		
+		echoResult(db_success, array("dateEnd" => $test->dateEnd));
+	}
+	
+	function finishSubmission() {
+		global $args;
+		$testResult = test::dbGetByCode($args->code, $test);
+		$textResult = text::dbGetById($test->textId, $text);
+		$report = new diffReport($text->text, $args->text);
+		
+		$submission = submission::fromValues($args->firstname, $args->surname, $args->email, time(), $test->id, $test->textId, serialize($report), $report->totalSentences, $report->totalWords, $report->totalLetters, $report->faultySentences, $report->faultyWords, $report->faultyLetters);
+		
+		echoResult($submission->dbInsert());
+	}
 
 	$args = json_decode(file_get_contents("php://input"));
 	switch ($_GET["method"]) {
@@ -91,6 +115,7 @@
 		case "deleteTest": deleteTest(); break;
 		case "getTestList": getTestList(); break;
 		case "getTestById": getTestById(); break;
-		
+		case "startSubmission": startSubmission(); break;
+		case "finishSubmission": finishSubmission(); break;
 	}
 ?>

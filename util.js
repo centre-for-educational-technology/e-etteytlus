@@ -7,6 +7,7 @@ function addClass(el, className) { remClass(el, className); el.className += " " 
 function setState(el, state) { el.setAttribute("data-state", state); }
 function pad0(s, len) { s = "" + s; while (s.length < len) s = "0" + s; return s; }
 function unixTime() { return Math.floor(Date.now() / 1000); }
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 
 function ajax(method, obj, callback) {

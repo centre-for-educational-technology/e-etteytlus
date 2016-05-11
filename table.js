@@ -53,6 +53,14 @@ var tableManager = function(el) {
 		this.items.splice(idx, 1);
 		this.el.removeChild(item["el-" + this.name]);
 	}.bind(this);
+	
+	this.clear = function() {
+		for (var i = 0; i < this.items.length; i++) {
+			var item = this.items[i];
+			this.el.removeChild(item["el-" + this.name]);
+		}
+		this.items = [];
+	}.bind(this);
 };
 
 onLoad(function(){

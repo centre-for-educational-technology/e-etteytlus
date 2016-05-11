@@ -99,9 +99,11 @@ function stopTest(e) {
 }
 
 function navigateConductTest(test) {
+	select("#conductTestCode").innerHTML = test.code;
 	select("#conductTestTextName").innerHTML = test.textName;
 	select("#conductTestCountdown").setAttribute("data-countdown-end", test.dateEnd);
 	select("#conductTestId").value = test.id;
+	select("#conductTestNavView").onclick = function() { navigateTestDetail(test); };
 	navigate("conductTest");
 }
 
@@ -113,10 +115,33 @@ function navigateStartTest(test) {
 	navigate("startTest");
 }
 
+function navigateTestDetail(test) {
+	ajax("getTestSubmissions", test, function(r) {
+		if (r.result == "success") {
+			tables["submissionList"].clear();
+			for (var i = 0; i < r.arg.length; i++) {
+				var subm = r.arg[i];
+				var resultPerc = Math.floor((subm.totalLetters - subm.faultyLetters) / subm.totalLetters * 100) + "%";
+				var resultRep = "<table>";
+				resultRep += "<tr><td>Vigaseid tähemärke:</td><td>" + subm.faultyLetters + " / " + subm.totalLetters + "</td>";
+				resultRep += "<tr><td>Vigaseid sõnu:</td><td>" + subm.faultyWords + " / " + subm.totalWords + "</td>";
+				resultRep += "<tr><td>Vigaseid lauseid:</td><td>" + subm.faultySentences + " / " + subm.totalSentences + "</td>";
+				subm.result = '<div class="tooltipper">' + resultPerc + '<div class="tooltip">' + resultRep +'</div></div>'
+				tables["submissionList"].push(subm);
+			}
+		
+			select("#testDetailCode").innerHTML = test.code;
+			select("#testDetailTextTitle").innerHTML = test.textName;
+			navigate("testDetail");
+		}
+	});
+}
+
 function viewTest(item) {
 	switch (item.status) {
 		case "Alustamata": navigateStartTest(item); break;
 		case "Toimumas": navigateConductTest(item); break;
+		case "Lõppenud": navigateTestDetail(item); break;
 	}
 }
 
@@ -171,6 +196,22 @@ function uiTestPush(item) {
 
 function uiTestPopById(id) {
 	tables["testList"].popById(id);
+}
+
+//submissions
+
+function viewSubmission(item) {
+	select("#subDetailTestCode").innerHTML = item.testCode;
+	select("#subDetailFirstname").innerHTML = item.firstname;
+	select("#subDetailSurname").innerHTML = item.surname;
+	select("#subDetailEmail").innerHTML = item.email;
+	select("#subDetailDate").innerHTML = new Date(item.date * 1000).toISOString().slice(0,10).replace(/-/g,"");
+	select("#subDetailTextTitle").innerHTML = item.textTitle;
+	select("#subDetailText").innerHTML = item.report;
+	select("#subDetailFaultyLetters").innerHTML = item.faultyLetters + " / " + item.totalLetters;
+	select("#subDetailFaultyWords").innerHTML = item.faultyWords + " / " + item.totalWords;
+	select("#subDetailFaultySentences").innerHTML = item.faultySentences + " / " + item.totalSentences;
+	navigate("submissionDetail");
 }
 
 

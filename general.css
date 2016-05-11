@@ -164,3 +164,42 @@ tr:hover {
 	float:right;
 	line-height:60px;
 }
+
+.tooltipper {
+	position:relative;
+	width:100%;
+}
+
+.tooltip {
+	overflow:hidden;
+	position:absolute;
+	left:101%; top:-5px;
+	background-color:rgba(0,0,0,0.5);
+	color:white;
+	font:12px 'Open Sans';
+	white-space:nowrap;
+	max-height:0;
+	opacity:0;
+	transition: opacity 0.2s;
+}
+
+.tooltip tr {
+	background-color:transparent;
+}
+
+.tooltipper:hover .tooltip, .tooltip:hover {
+	max-height:5000px;
+	opacity:1;
+}
+
+.faultyLetter {
+	background-color:rgba(255, 0, 0, 0.5);
+}
+
+.faultyWord {
+	background-color:rgba(255, 150, 0, 0.5);
+}
+
+.faultySentence {
+	background-color:rgba(255, 255, 0, 0.3);
+}

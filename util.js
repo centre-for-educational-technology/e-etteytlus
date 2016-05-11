@@ -41,8 +41,9 @@ onLoad(function() {
 				timeLeft -= mins * 60;
 				el.innerHTML = pad0(hrs, 2) + ":" + pad0(mins, 2) + ":" + pad0(timeLeft, 2);
 			}
-			setTimeout(cdf, 1000);
+			setTimeout(cdf, 100);
 		}
 		cdf();
 	});
 });
+

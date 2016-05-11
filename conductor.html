@@ -55,10 +55,10 @@
 					<table data-table="testList" data-table-onRowClick="viewTest">
 					<tr>
 						<th data-table-column="code">Kood</th>
+						<th data-table-column="submissions">Esitatud töid</th>
 						<th data-table-column="conductorName">Juhendaja</th>
-						<th data-table-column="textName">Tekst</th>
+						<th data-table-column="textName">Kontrolltekst</th>
 						<th data-table-column="status">Staatus</th>
-						<th data-table-column="submissions">Vastused</th>
 					</tr>
 				</table>
 			</div>
@@ -126,13 +126,54 @@
 		<!-- Conduct test -->
 		<div class="container" data-nav="conductTest">
 			<div id="conductTest">
-				<h1>E-etteütlus "<span id="conductTestTextName"></span>" hetkel toimumas</h1>
+				<h1>E-etteütlus "<span id="conductTestTextName"></span>"</h1>
+				<h2>Kood:</h2>
+				<h4 id="conductTestCode"></h4>
+				<h2>Aega jäänud:</h2>
 				<h4 id="conductTestCountdown" data-countdown-end="0"></h4>
+				
 				
 				<form onsubmit="stopTest(event);">
 					<input id="conductTestId" type="hidden" name="id">
 					<button type="submit">Lõpeta</button>
 				</form>
+				<button type="button" id="conductTestNavView">Esitatud tööd</button>
+			</div>
+		</div>
+		
+		<!-- Test detail -->
+		<div class="container" data-nav="testDetail">
+			<div id="testDetail">
+				<h1>E-etteütlus <span id="testDetailCode"></span> "<span id="testDetailTextTitle"></span>"</h1>
+				<table data-table="submissionList" data-table-onRowClick="viewSubmission">
+					<tr>
+						<th data-table-column="surname">Perenimi</th>
+						<th data-table-column="firstname">Eesnimi</th>
+						<th data-table-column="email">E-post</th>
+						<th data-table-column="result">Tulemus</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<!-- Submission detail -->
+		<div class="container" data-nav="submissionDetail">
+			<div id="submissionDetail">
+				<h1>Sooritus etteütlusele <span id="subDetailTestCode"></span></h1>
+				<table><tr>
+					<td>
+						<h2>Nimi: <span id="subDetailFirstname"></span> <span id="subDetailSurname"></span></h2>
+						<h2>E-post: <span id="subDetailEmail"></span></h2>
+						<h2>Kuupäev: <span id="subDetailDate"></span></h2>
+						<h2>Kontrolltekst: <span id="subDetailTextTitle"></span></h2>
+					</td><td>
+						<h2>Vigaseid tähemärke: <span id="subDetailFaultyLetters"></span></h2>
+						<h2>Vigaseid sõnu: <span id="subDetailFaultyWords"></span></h2>
+						<h2>Vigaseid lauseid: <span id="subDetailFaultySentences"></span></h2>
+					</td>
+				</tr></table>
+				
+				<h2 id="subDetailText"></h2>
 			</div>
 		</div>
 		

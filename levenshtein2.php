@@ -126,6 +126,7 @@
 		public $sampleLen;
 		public $controlLen;
 		public $editsLen;
+		public $parsed;
 		
 		const FLAG_FAULTY_LETTER = 1;
 		const FLAG_FAULTY_SENTENCE = 2;
@@ -257,7 +258,11 @@
 			$this->sampleLen = mb_strlen($this->sample, 'UTF-8');
 			$this->controlLen = mb_strlen($this->control, 'UTF-8');
 			$this->editsLen = count($this->edits);
-			$this->parseSample();
+			
+			$fla = "class='faultyLetter'";
+			$fwa = "class='faultyWord'";
+			$fsa = "class='faultySentence'";
+			$this->parsed = $this->parseSample($fla, $fwa, $fsa);
 		}
 	}
 	

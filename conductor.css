@@ -28,3 +28,16 @@
 #conductTest {
 	width:800px;
 }
+
+#testDetail {
+	width:800px;
+}
+
+#submissionDetail {
+	width:800px;
+}
+
+#submissionDetail tr {
+	background-color:transparent;
+	cursor:auto;
+}

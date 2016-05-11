@@ -99,9 +99,20 @@
 		$textResult = text::dbGetById($test->textId, $text);
 		$report = new diffReport($text->text, $args->text);
 		
-		$submission = submission::fromValues($args->firstname, $args->surname, $args->email, time(), $test->id, $test->textId, serialize($report), $report->totalSentences, $report->totalWords, $report->totalLetters, $report->faultySentences, $report->faultyWords, $report->faultyLetters);
+		$submission = submission::fromValues($args->firstname, $args->surname, $args->email, time(), $test->id, $test->code, $test->textId, $test->textName, serialize($report), $report->totalSentences, $report->totalWords, $report->totalLetters, $report->faultySentences, $report->faultyWords, $report->faultyLetters);
 		
+		$test->submissions++;
+		$test->dbUpdate();
 		echoResult($submission->dbInsert());
+	}
+	
+	function getTestSubmissions() {
+		global $args, $current_user;
+		$result = submission::dbSelect(array("testId" => $args->id), $results);
+		for ($i = 0; $i < count($results); $i++) {
+			$results[$i]->report = unserialize($results[$i]->report)->parsed;
+		}
+		echoResult($result, $results);
 	}
 
 	$args = json_decode(file_get_contents("php://input"));
@@ -117,5 +128,6 @@
 		case "getTestById": getTestById(); break;
 		case "startSubmission": startSubmission(); break;
 		case "finishSubmission": finishSubmission(); break;
+		case "getTestSubmissions": getTestSubmissions(); break;
 	}
 ?>

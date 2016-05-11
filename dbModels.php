@@ -57,14 +57,15 @@
 	//test submission model
 	class submission extends base {
 		public static $table_name = "submissions";
-		public $id, $firstname, $surname, $email, $date, $testId, $textId, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters;
+		public $id, $firstname, $surname, $email, $date, $testId, $testCode, $textId, $textTitle, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters;
 		
-		public static function fromValues($firstname, $surname, $email, $date, $testId, $textId, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters) {
+		public static function fromValues($firstname, $surname, $email, $date, $testId, $testCode, $textId, $textTitle, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters) {
 			$ret = new static;
 			$ret->firstname = $firstname; $ret->surname = $surname; $ret->email = $email; $ret->date = $date; 
-			$ret->testId = $testId; $ret->textId = $textId; $ret->report = $report;
+			$ret->testId = $testId; $ret->textId = $textId; $ret->report = $report; $ret->testCode = $testCode;
 			$ret->totalSentences = $totalSentences; $ret->totalWords = $totalWords; $ret->totalLetters = $totalLetters;
 			$ret->faultySentences = $faultySentences; $ret->faultyWords = $faultyWords; $ret->faultyLetters = $faultyLetters;
+			$ret->textTitle = $textTitle;
 			return $ret;
 		}
 	}
@@ -181,7 +182,9 @@
 			email VARCHAR(255),
 			date INT,
 			testId INT,
+			testCode CHAR(4),
 			textId INT,
+			textTitle VARCHAR(255),
 			report TEXT,
 			totalSentences INT,
 			totalWords INT,

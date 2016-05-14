@@ -10,14 +10,45 @@ function unixTime() { return Math.floor(Date.now() / 1000); }
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 
-function ajax(method, obj, callback) {
+function ajax(method, obj, callback_success, callback_error, timeout_ms) {
+	if (!isdef(obj)) obj = {};
     var request = new XMLHttpRequest();
+	var complete = false;
+	if (isdef(timeout_ms)) {
+		setTimeout(function() {
+			if (complete) return;
+			complete = true;
+			if (isdef(callback_error)) {
+				callback_error({"result":"error_timeout"});
+			}
+		}, timeout_ms);
+	}
+	
     request.onreadystatechange = function () {
+		if (complete) return;
         if (request.readyState == 4 && request.status == 200) {
-			console.log("RESPONSE: " + request.responseText);
-            if (isdef(callback)) callback(JSON.parse(request.responseText));
-        }
+			console.log("RESPONSE: " + request.responseText);	
+			complete = true;
+			try {
+				var obj = JSON.parse(request.responseText);
+				if (obj.result == "success" && isdef(callback_success)) {
+					callback_success(obj);
+				} else if (isdef(callback_error)) {
+					callback_error(obj);
+				}
+			} catch(e) {
+				if (isdef(callback_error)) {
+					callback_error({"result":"error_json"});
+				}
+			}
+        } else if (request.status == 404) {
+			complete = true;
+			if (isdef(callback_error)) {
+				callback_error({"result":"error_404"});
+			}
+		}
     };
+	
     request.open("POST", "ajax.php?method=" + method, true);
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(JSON.stringify(obj));

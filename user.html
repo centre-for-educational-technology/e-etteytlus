@@ -7,19 +7,19 @@
 		<link rel="stylesheet" href="form.css">
 		<link rel="stylesheet" href="user.css">
 		<script src="util.js" charset="utf-8"></script>
+		<script src="fill.js" charset="utf-8"></script>
 		<script src="nav.js" charset="utf-8"></script>
 		<script src="form.js" charset="utf-8"></script>
-		<script src="table.js" charset="utf-8"></script>
 		<script src="user.js" charset="utf-8"></script>
 	</head>
 	<body>
 	
-		<!-- step 1 -->
-		<div class="container" data-nav="step1">
-			<div id="userInfo">
+		<!-- user info -->
+		<div id="user_info" class="container" data-nav-state="hidden">
+			<div class="w400">
 				<h1>E-etteütlus</h1>			
 				<h3>Täida palun kõik väljad!</h3>
-				<form onsubmit="submitUserInfo(event);">
+				<form onsubmit="submit_user_info(event);">
 					<label for="firstname">Eesnimi</label>
 					<input  type="text" id="firstname" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required autofocus>
 					<label for="surname">Perenimi</label>
@@ -33,9 +33,25 @@
 			</div>	
 		</div>
 		
-		<!-- step 2 -->
-		<div class="container" data-nav="step2">
-			<div id="dictation">
+		<!-- not ready -->
+		<div id="not_ready" class="container" data-nav-state="hidden">
+			<div class="w500 msg">
+				<h1>Etteütlus pole veel alanud!</h1>
+				<h2>Kannatust</h2>
+			</div>
+		</div>
+		
+		<!-- not found -->
+		<div id="not_found" class="container" data-nav-state="hidden">
+			<div class="w800 msg">
+				<h1>Sellise koodiga etteütlust ei ole olemas või on lõppenud.</h1>
+				<h2>Kontrolli koodi?</h2>
+			</div>
+		</div>
+		
+		<!-- dictation -->
+		<div id="dictation" class="container" data-nav-state="hidden">
+			<div class="w800">
 				<h1>
 					<span id="s2ParticipantName"></span> etteütlus <span id="s2TestCode"></span>
 					<div class="note" id="s2TimeRemaining" data-countdown-end="0"></div>
@@ -49,25 +65,25 @@
 			</div>
 		</div>
 		
-		<!-- step 2.5 -->
-		<div class="container" data-nav="step25">
-			<div id="waiting">
-				<h1></h1>
-				<h2>Tegutsen</h2>
-			</div>
-		</div>
 		
-		<!-- step 3 -->
-		<div class="container" data-nav="step3">
-			<div id="complete">
+		<!-- complete -->
+		<div id="complete" class="container" data-nav-state="hidden">
+			<div class="w300 msg">
 				<h1>Etteütlus sooritatud!</h1>
 				<h2>Täname osalemise eest.</h2>
 			</div>
 		</div>
 		
+		<!-- system fault -->
+		<div id="system_fault" class="container" data-nav-state="hidden">
+			<div class="w300 msg">
+				<h1>Süsteemi viga.</h1>
+				<h2>Vabandame</h2>
+			</div>
+		</div>
 
 		
-		<script type="text/javascript">navigate("step1");</script>
+		<script type="text/javascript">navigate("#user_info");</script>
 	</body>
 </html>
 

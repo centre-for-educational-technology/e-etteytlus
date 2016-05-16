@@ -1,42 +1,5 @@
 @charset "UTF-8";
 
-#newTest {
-	width:400px;
-}
-
-#newText {
-	width:800px;
-}
-
-#textList {
-	width:800px;
-}
-
-#textDetail {
-	width:800px;
-}
-
-#testList {
-	
-	width:800px;
-}
-
-#startTest {
-	width:800px;
-}
-
-#conductTest {
-	width:800px;
-}
-
-#testDetail {
-	width:800px;
-}
-
-#submissionDetail {
-	width:800px;
-}
-
 #submissionDetail tr {
 	background-color:transparent;
 	cursor:auto;

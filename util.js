@@ -1,4 +1,5 @@
 function isdef(x) { return typeof x !== 'undefined'; }
+function safecall() { if (isdef(arguments[0])) { arguments[0].apply(this, Array.prototype.splice.call(arguments, 1));} }
 function select(q) { return document.querySelector(q); }
 function onLoad(callback) { window.addEventListener("load", callback, false); }
 function toArr(collection) { var arr = []; for (var i = 0; i < collection.length; i++) { arr.push(collection[i]); } return arr; }
@@ -9,18 +10,21 @@ function pad0(s, len) { s = "" + s; while (s.length < len) s = "0" + s; return s
 function unixTime() { return Math.floor(Date.now() / 1000); }
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-
+//method = "method name"
+//obj = {}, optional
+//callback_success, callback_error = function, optional
+//timeout_ms = integer, optional
 function ajax(method, obj, callback_success, callback_error, timeout_ms) {
+	//console.log("AJAX: " + method);
 	if (!isdef(obj)) obj = {};
     var request = new XMLHttpRequest();
 	var complete = false;
+	
 	if (isdef(timeout_ms)) {
 		setTimeout(function() {
 			if (complete) return;
 			complete = true;
-			if (isdef(callback_error)) {
-				callback_error({"result":"error_timeout"});
-			}
+			safecall(callback_error, {"result":"error_timeout"});
 		}, timeout_ms);
 	}
 	
@@ -29,23 +33,22 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
         if (request.readyState == 4 && request.status == 200) {
 			console.log("RESPONSE: " + request.responseText);	
 			complete = true;
+			var obj;
 			try {
-				var obj = JSON.parse(request.responseText);
-				if (obj.result == "success" && isdef(callback_success)) {
-					callback_success(obj);
-				} else if (isdef(callback_error)) {
-					callback_error(obj);
-				}
+				obj = JSON.parse(request.responseText);
 			} catch(e) {
-				if (isdef(callback_error)) {
-					callback_error({"result":"error_json"});
-				}
+				safecall(callback_error, {"result":"error_json"});
+			}
+			if (!isdef(obj)) {
+				safecall(callback_error, {"result":"error_json"});
+			} else if (obj.result == "success") {
+				safecall(callback_success, obj);
+			} else {
+				safecall(callback_error, obj);
 			}
         } else if (request.status == 404) {
 			complete = true;
-			if (isdef(callback_error)) {
-				callback_error({"result":"error_404"});
-			}
+			safecall(callback_error, {"result":"error_404"});
 		}
     };
 	

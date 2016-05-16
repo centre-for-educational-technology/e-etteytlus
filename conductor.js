@@ -1,235 +1,150 @@
-//text
-function submitText(e) {
+//	*********
+//	  TEXTS
+//	*********
+
+function view_text(row) {
+	navigate("#textDetail", {"data-fill-where": "id=" + row.id});
+}
+
+function submit_text(e) {
 	e.preventDefault();
 	var data = formData(e.target);
-	ajax("submitText", data, function(r) {
-		if (r.result == "success") {
-			uiTextPush(r.arg);
-			e.target.reset();
-			navigate("msgTextAdded");
-			navigateAuto(2000, "textList");
-		}
+	data["table"] = "texts";
+	ajax("db_insert", data, function(r) {
+		e.target.reset();
+		navigate("#msgTextAdded");
+		navigate_timeout("#textList", undefined, 2000);
+	}, function(r) {
+		//TODO
 	});
 }
 
 function deleteText(e) {
 	e.preventDefault();
 	var data = formData(e.target);
-	ajax("deleteText", data, function(r) {
-		if (r.result == "success") {
-			uiTextPopById(data.id);
-			navigate("msgTextDeleted");
-			navigateAuto(2000, "textList");
-		}
+	data.table = "texts";
+	ajax("db_delete", data, function(r) {
+		navigate("#msgTextDeleted");
+		navigate_timeout("#textList", undefined, 2000);
+	}, function(r) {
+		//TODO
 	});
 }
 
-function viewText(item) {
-	select("#textDetailTitle").innerHTML = item.title;
-	select("#textDetailAuthor").innerHTML = item.authorName;
-	select("#textDetailText").innerHTML = item.text;
-	select("#textDetailId").value = item.id;
-	navigate("textDetail");
-}
-
-function uiTextPush(item) {
-	//add item to select in 'new test'
-	var ntsTextNameSelect = select("#ntsTextName");	
-	var opt = document.createElement("option");
-	opt.value = item.id;
-	opt.innerHTML = item.title;
-	ntsTextNameSelect.appendChild(opt);
-	
-	//add item to textList table
-	tables["textList"].push(item);
-}
-
-function uiTextPopById(id) {
-	//remove item from select in 'new test'
-	var ntsTextNameSelect = select("#ntsTextName");
-	var opts = ntsTextNameSelect.childNodes;
-	for (var i = 0; i < opts.length; i++) {
-		if (opts[i].value == id) {
-			ntsTextNameSelect.removeChild(opts[i]);
-			break;
-		}
+function interpret_text_select(rows) {
+	var ret = "";
+	for (var i = 0; i < rows.length; i++) {
+		ret += "<option value='" + rows[i].id + "'>" + rows[i].title + "</option>";
 	}
-	
-	//remove item from textList table
-	tables["textList"].popById(id);
+	return ret;
 }
 
-//test
+//	*********
+//	  TESTS
+//	*********
 
-function submitTest(e) {
-	e.preventDefault();
-	var data = formData(e.target);
-	ajax("submitTest", data, function(r) {
-		if (r.result == "success") {
-			uiTestPush(r.arg);
-			navigateStartTest(r.arg);
-			e.target.reset();
-		}
-	});
-}
-
-function startTest(e) {
-	e.preventDefault();
-	var data = formData(e.target);
-	ajax("startTest", data, function(r) {
-		if (r.result == "success") {
-			uiTestPopById(r.arg.id);
-			uiTestPush(r.arg);
-			navigateConductTest(r.arg);
-		}
-	});
-}
-
-function stopTest(e) {
-	e.preventDefault();
-	var data = formData(e.target);
-	ajax("stopTest", data, function(r) {
-		if (r.result == "success") {
-			uiTestPopById(r.arg.id);
-			uiTestPush(r.arg);
-			navigate("msgTestEnded");
-			navigateAuto(2000, "testList");
-		}
-	});
-}
-
-function navigateConductTest(test) {
-	select("#conductTestCode").innerHTML = test.code;
-	select("#conductTestTextName").innerHTML = test.textName;
-	select("#conductTestCountdown").setAttribute("data-countdown-end", test.dateEnd);
-	select("#conductTestId").value = test.id;
-	select("#conductTestNavView").onclick = function() { navigateTestDetail(test); };
-	navigate("conductTest");
-}
-
-function navigateStartTest(test) {
-	select("#startTestTextName").innerHTML = test.textName;
-	select("#startTestDurationMin").innerHTML = test.dateEnd;
-	select("#startTestCode").innerHTML = test.code;
-	select("#startTestId2").value = test.id;
-	navigate("startTest");
-}
-
-function navigateTestDetail(test) {
-	ajax("getTestSubmissions", test, function(r) {
-		if (r.result == "success") {
-			tables["submissionList"].clear();
-			for (var i = 0; i < r.arg.length; i++) {
-				var subm = r.arg[i];
-				var resultPerc = Math.floor((subm.totalLetters - subm.faultyLetters) / subm.totalLetters * 100) + "%";
-				var resultRep = "<table>";
-				resultRep += "<tr><td>Vigaseid tähemärke:</td><td>" + subm.faultyLetters + " / " + subm.totalLetters + "</td>";
-				resultRep += "<tr><td>Vigaseid sõnu:</td><td>" + subm.faultyWords + " / " + subm.totalWords + "</td>";
-				resultRep += "<tr><td>Vigaseid lauseid:</td><td>" + subm.faultySentences + " / " + subm.totalSentences + "</td>";
-				subm.result = '<div class="tooltipper">' + resultPerc + '<div class="tooltip">' + resultRep +'</div></div>'
-				tables["submissionList"].push(subm);
-			}
-		
-			select("#testDetailCode").innerHTML = test.code;
-			select("#testDetailTextTitle").innerHTML = test.textName;
-			navigate("testDetail");
-		}
-	});
-}
-
-function viewTest(item) {
-	switch (item.status) {
-		case "Alustamata": navigateStartTest(item); break;
-		case "Toimumas": navigateConductTest(item); break;
-		case "Lõppenud": navigateTestDetail(item); break;
+function view_test(row) {
+	console.log("VIEW_TEST");
+	row["status"] = interpret_test_status(row);
+	switch (row.status) {
+		case "Alustamata": 	navigate("#startTest", { "data-fill-where" : "id=" + row.id }); break;
+		case "Toimumas": 	navigate("#conductTest", { "data-fill-where" : "id=" + row.id }); break;
+		case "Lõppenud": 	navigate("#testDetail",  { "data-fill-where" : "id=" + row.id }); break;
 	}
 }
 
-function deleteTest(e) {
+function start_test(e) {
 	e.preventDefault();
 	var data = formData(e.target);
-	ajax("deleteTest", data, function(r) {
-		if (r.result == "success") {
-			uiTestPopById(data.id);
-			navigate("msgTestDeleted");
-			navigateAuto(2000, "testList");
-		}
+	data["table"] = "tests";
+	ajax("db_insert", data, function(r) {
+		navigate("#startTest", { "data-fill-where" : "id=" + r.arg });
+		e.target.reset();
+	}, function(r) {
+		//TODO
 	});
 }
 
-function cancelTest(e) {
+function conduct_test(e) {
 	e.preventDefault();
 	var data = formData(e.target);
-	ajax("deleteTest", data, function(r) {
-		if (r.result == "success") {
-			uiTestPopById(data.id);
-			navigate("msgTestCancelled");
-			navigateAuto(2000, "testList");
-		}
+	data["table"] = "tests";
+	data["dateBegin"] = unixTime();
+	data.dateEnd = parseInt(data.dateEnd) * 60 + data.dateBegin; 
+	ajax("db_update", data, function(r) {
+		navigate("#conductTest", { "data-fill-where" : "id=" + r.arg });
+	}, function(r) {
+		//TODO
 	});
 }
 
-function checkTest(item) {
-	ajax("getTestById", {"id":item.id}, function(r) {
-		if (r.result == "success") {
-			uiTestPopById(r.arg.id);
-			uiTestPush(r.arg);
-		}
+function stop_test(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	data["table"] = "tests";
+	data["dateEnd"] = unixTime();
+	ajax("db_update", data, function(r) {
+		navigate("#msgTestEnded");
+		navigate_timeout("#testList", undefined, 2000);
+	}, function(r) {
+		//TODO
 	});
 }
 
-function uiTestPush(item) {
-	//generate status
-	item["status"] = "NaN";
-	if (item.dateBegin == 0) {
-		item.status = "Alustamata";
-	} else if (item.dateEnd > unixTime()) {
-		//set update timer
-		setTimeout(function() { checkTest(item); }, (item.dateEnd - unixTime() + 1) * 1000);
-		item.status = "Toimumas";
-	} else {
-		item.status = "Lõppenud";
-	}
-
-	tables["testList"].push(item);
-}
-
-function uiTestPopById(id) {
-	tables["testList"].popById(id);
-}
-
-//submissions
-
-function viewSubmission(item) {
-	select("#subDetailTestCode").innerHTML = item.testCode;
-	select("#subDetailFirstname").innerHTML = item.firstname;
-	select("#subDetailSurname").innerHTML = item.surname;
-	select("#subDetailEmail").innerHTML = item.email;
-	select("#subDetailDate").innerHTML = new Date(item.date * 1000).toISOString().slice(0,10).replace(/-/g,"");
-	select("#subDetailTextTitle").innerHTML = item.textTitle;
-	select("#subDetailText").innerHTML = item.report;
-	select("#subDetailFaultyLetters").innerHTML = item.faultyLetters + " / " + item.totalLetters;
-	select("#subDetailFaultyWords").innerHTML = item.faultyWords + " / " + item.totalWords;
-	select("#subDetailFaultySentences").innerHTML = item.faultySentences + " / " + item.totalSentences;
-	navigate("submissionDetail");
-}
-
-
-onLoad(function(){
-	//initially load all texts
-	ajax("getTextList", {}, function(r) {
-		if (r.result == "success") {
-			for (var i = 0; i < r.arg.length; i++) {
-				uiTextPush(r.arg[i]);
-			}
-		}
+function cancel_test(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	data["table"] = "tests";
+	ajax("db_delete", data, function(r) {
+		navigate("#msgTestCancelled");
+		navigate_timeout("#testList", undefined, 2000);
+	}, function(r) {
+		//TODO
 	});
-	
-	ajax("getTestList", {}, function(r) {
-		if (r.result == "success") {
-			for (var i = 0; i < r.arg.length; i++) {
-				uiTestPush(r.arg[i]);
-			}
-		}
+}
+
+function delete_test(e) {
+	e.preventDefault();
+	data["table"] = "tests";
+	ajax("db_delete", data, function(r) {
+		navigate("#msgTestDeleted");
+		navigate_timeout("#testList", undefined, 2000);
+	}, function(r) {
+		//TODO
 	});
-});
+}
+
+function interpret_test_status(row) {
+	if (row.dateEnd < 1000) return "Alustamata";
+	if (row.dateEnd > unixTime()) return "Toimumas";
+	return "Lõppenud";
+}
+
+function interpret_conduct_view_details(row) {
+	return "navigate('#testDetail', {'data-fill-where' : 'id=" + row.id + "'})";
+}
+
+//	***************
+//	  SUBMISSIONS
+//	***************
+
+function view_submission(row) {
+	navigate("#submissionDetail", {"data-fill-where" : "id=" + row.id});
+}
+
+function interpret_submission_result(row) {
+	var resultPerc = Math.floor((row.totalLetters - row.faultyLetters) / row.totalLetters * 100) + "%";
+	var resultRep = "<table>";
+	resultRep += "<tr><td>Vigaseid tähemärke:</td><td>" + row.faultyLetters + " / " + row.totalLetters + "</td>";
+	resultRep += "<tr><td>Vigaseid sõnu:</td><td>" + row.faultyWords + " / " + row.totalWords + "</td>";
+	resultRep += "<tr><td>Vigaseid lauseid:</td><td>" + row.faultySentences + " / " + row.totalSentences + "</td>";
+	return '<div class="tooltipper">' + resultPerc + '<div class="tooltip">' + resultRep +'</div></div>'
+}
+
+function interpret_submissions_where(row) {
+	return "testId="+row.id;
+}
+
+
+
+

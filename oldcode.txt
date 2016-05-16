@@ -1,0 +1,14 @@
+		<!-- Test detail -->
+		<div id="testDetail" class="container" data-fill-table="tests" data-nav-state="hidden">
+			<div class="w800" >
+				<h1>E-etteütlus <span data-fill-columns="code"></span> "<span data-fill-columns="textName"></span>"</h1>
+				<table data-table="submissionList" data-table-db-table="submissions" data-table-on-rowclick="viewSubmission" data-fill-columns="id" data-fill-targets="data-table-where" data-fill-interpreter="interpret_submissions_where">
+					<tr>
+						<th data-table-column="surname">Perenimi</th>
+						<th data-table-column="firstname">Eesnimi</th>
+						<th data-table-column="email">E-post</th>
+						<th data-table-column="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-table-interpreter="interpret_submission_result">Tulemus</th>
+					</tr>
+				</table>
+			</div>
+		</div>

@@ -7,68 +7,69 @@
 		<link rel="stylesheet" href="form.css">
 		<link rel="stylesheet" href="conductor.css">
 		<script src="util.js" charset="utf-8"></script>
+		<script src="fill.js" charset="utf-8"></script>
 		<script src="nav.js" charset="utf-8"></script>
 		<script src="form.js" charset="utf-8"></script>
-		<script src="table.js" charset="utf-8"></script>
 		<script src="conductor.js" charset="utf-8"></script>
 	</head>
 	<body>	
+	
+	
 		<!-- Text list -->
-		<div class="container" data-nav="textList">
-			<div id="textList" >
+		<div id="textList" class="container" data-nav-state="hidden">
+			<div class="w800">
 				<h1>Kontrolltekstid</h1>	
-				<table data-table="textList" data-table-onRowClick="viewText">
-					<tr>
-						<th data-table-column="title">Pealkiri</th>
-						<th data-table-column="authorName">Autor</th>
+				<table data-fill-table="texts" data-fill-on-rowclick="view_text">
+					<tr data-fill-table-columns-silent="id">
+						<th data-fill-table-columns="title">Pealkiri</th>
+						<th data-fill-table-columns="authorName">Autor</th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
 		<!-- Text detail -->
-		<div class="container" data-nav="textDetail">
-			<div id="textDetail">
-				<h1 id="textDetailTitle"></h1>
-				<h3 id="textDetailAuthor"></h3>
-				<h2 id="textDetailText"></h2>
+		<div id="textDetail" class="container" data-fill-table="texts" data-nav-state="hidden">
+			<div class="w800">
+				<h1 data-fill-columns="title"></h1>
+				<h3 data-fill-columns="authorName"></h3>
+				<h2 data-fill-columns="text"></h2>
 				
 				<form onsubmit="deleteText(event);">
-					<input id="textDetailId" type="hidden" name="id">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
-				</form>
-				
+				</form>			
 			</div>
 		</div>
 		
 		<!-- Msg: text delete -->
-		<div class="container" data-nav="msgTextDeleted">
-			<div >
+		<div id="msgTextDeleted" class="container" data-nav-state="hidden">
+			<div>
 				<h1>Kontrolltekst kustutatud</h1>		
 			</div>
 		</div>
 		
 		<!-- Test list -->
-		<div class="container" data-nav="testList">
-			<div id="testList" >
+		<div id="testList" class="container" data-nav-state="hidden">
+			<div class="w800">
 				<h1>Etteütlused</h1>
-					<table data-table="testList" data-table-onRowClick="viewTest">
-					<tr>
-						<th data-table-column="code">Kood</th>
-						<th data-table-column="submissions">Esitatud töid</th>
-						<th data-table-column="conductorName">Juhendaja</th>
-						<th data-table-column="textName">Kontrolltekst</th>
-						<th data-table-column="status">Staatus</th>
+					<table data-fill-table="tests" data-fill-on-rowclick="view_test">
+					<tr data-fill-table-columns-silent="id">
+						<th data-fill-table-columns="code">Kood</th>
+						<th data-fill-table-columns="submissions">Esitatud töid</th>
+						<th data-fill-table-columns="conductorName">Juhendaja</th>
+						<th data-fill-table-columns="textName">Kontrolltekst</th>
+						<th data-fill-table-columns="dateEnd" data-fill-interpreter="interpret_test_status">Staatus</th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
 		<!-- New text -->
-		<div class="container" data-nav="newText1">
-			<div id="newText" >
+		<div id="newText" class="container" data-nav-state="hidden">
+			<div class="w800">
 				<h1>Lisa uus kontrolltekst</h1>
-				<form onsubmit="submitText(event);">
+				<form onsubmit="submit_text(event);">
 					<label for="ntxTitle">Pealkiri (ei kuvata vastajatele)</label>
 					<input  type="text" id="ntxTitle" name="title" data-pattern=".{3,}" autocomplete="off" required>
 					<label for="ntxText">Kontrolltekst</label>
@@ -80,19 +81,19 @@
 		</div>
 		
 		<!-- Msg: text add -->
-		<div class="container" data-nav="msgTextAdded">
+		<div id="msgTextAdded" class="container" data-nav-state="hidden">
 			<div >
 				<h1>Kontrolltekst lisatud</h1>		
 			</div>
 		</div>
 	
 		<!-- New test -->
-		<div class="container" data-nav="newTest">
-			<div id="newTest" >
+		<div id="newTest" class="container" data-nav-state="hidden">
+			<div class="w400">
 				<h1>Alusta uut etteütlust</h1>
-				<form onsubmit="submitTest(event);" data-nav="step1">
+				<form onsubmit="start_test(event);">
 					<label for="ntsTextName">Etteütluse tekst</label>
-					<select id="ntsTextName" name="textId" autocomplete="off" required></select>
+					<select id="ntsTextName" name="textId" data-fill-table="texts" data-fill-columns="title, id" data-fill-interpreter="interpret_text_select" autocomplete="off" required></select>
 					<label for="ntsDuration">Lubatud aeg minutites</label>
 					<input type="text" data-pattern="^(0|[1-9][0-9]*)$" name="duration" value="30" required>
 					<button type="submit">Genereeri kood</button>
@@ -101,21 +102,22 @@
 		</div>
 		
 		<!-- Start test -->
-		<div class="container" data-nav="startTest">
-			<div id="startTest">
-				<h1>E-etteütlus "<span id="startTestTextName"></span>"</h1>
+		<div id="startTest" class="container" data-fill-table="tests" data-nav-state="hidden" >
+			<div class="w800">
+				<h1>E-etteütlus "<span data-fill-columns="textName"></span>"</h1>
 				
 				<ul>
 					<li>Etteütluse kood on ekraani peal kuvatav neljakohaline number.</li>
 					<li>Etteütluse sooritamiseks peab osavõtja sisestama koodi.</li>
-					<li>Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span id="startTestDurationMin"></span> Min) lõpuni.</li>
+					<li>Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span data-fill-columns="dateEnd"></span> Min) lõpuni.</li>
 					<li>Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.</li>		
 				</ul>
 				
-				<h4 id="startTestCode"></h1>
+				<h4 data-fill-columns="code"></h1>
 				
-				<form onreset="cancelTest(event);" onsubmit="startTest(event);">
-					<input id="startTestId2" type="hidden" name="id">		
+				<form onreset="cancel_test(event);" onsubmit="conduct_test(event);">
+					<input type="hidden" name="dateEnd" data-fill-columns="dateEnd" data-fill-targets="value">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">		
 					<button type="submit">Alusta</button>
 					<button type="reset">Tühista</button>
 				</form>
@@ -124,75 +126,75 @@
 		</div>
 		
 		<!-- Conduct test -->
-		<div class="container" data-nav="conductTest">
-			<div id="conductTest">
-				<h1>E-etteütlus "<span id="conductTestTextName"></span>"</h1>
+		<div id="conductTest" class="container" data-fill-table="tests" data-nav-state="hidden">
+			<div class="w800">
+				<h1>E-etteütlus "<span data-fill-columns="textName"></span>"</h1>
 				<h2>Kood:</h2>
-				<h4 id="conductTestCode"></h4>
+				<h4 data-fill-columns="code"></h4>
 				<h2>Aega jäänud:</h2>
-				<h4 id="conductTestCountdown" data-countdown-end="0"></h4>
+				<h4 data-fill-columns="dateEnd" data-fill-targets="data-countdown-end" data-countdown-end="0"></h4>
 				
 				
-				<form onsubmit="stopTest(event);">
-					<input id="conductTestId" type="hidden" name="id">
+				<form onsubmit="stop_test(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Lõpeta</button>
 				</form>
-				<button type="button" id="conductTestNavView">Esitatud tööd</button>
+				<button type="button" data-fill-columns="id" data-fill-targets="onclick" data-fill-interpreter="interpret_conduct_view_details">Esitatud tööd</button>
 			</div>
 		</div>
 		
 		<!-- Test detail -->
-		<div class="container" data-nav="testDetail">
-			<div id="testDetail">
-				<h1>E-etteütlus <span id="testDetailCode"></span> "<span id="testDetailTextTitle"></span>"</h1>
-				<table data-table="submissionList" data-table-onRowClick="viewSubmission">
-					<tr>
-						<th data-table-column="surname">Perenimi</th>
-						<th data-table-column="firstname">Eesnimi</th>
-						<th data-table-column="email">E-post</th>
-						<th data-table-column="result">Tulemus</th>
+		<div id="testDetail" class="container" data-fill-table="tests" data-fill-columns-silent="id" data-nav-state="hidden">
+			<div class="w800" >
+				<h1>E-etteütlus <span data-fill-columns="code"></span> "<span data-fill-columns="textName"></span>"</h1>
+				<table data-fill-table="submissions" data-fill-where="testId = $id" data-fill-on-rowclick="view_submission">
+					<tr data-fill-table-columns-silent="id">
+						<th data-fill-table-columns="surname">Perenimi</th>
+						<th data-fill-table-columns="firstname">Eesnimi</th>
+						<th data-fill-table-columns="email">E-post</th>
+						<th data-fill-table-columns="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-fill-interpreter="interpret_submission_result">Tulemus</th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
 		<!-- Submission detail -->
-		<div class="container" data-nav="submissionDetail">
-			<div id="submissionDetail">
-				<h1>Sooritus etteütlusele <span id="subDetailTestCode"></span></h1>
+		<div id="submissionDetail" class="container" data-fill-table="submissions" data-fill-columns-silent="id" data-nav-state="hidden">
+			<div class="w800">
+				<h1>Sooritus etteütlusele <span data-fill-columns="testCode"></span></h1>
 				<table><tr>
 					<td>
-						<h2>Nimi: <span id="subDetailFirstname"></span> <span id="subDetailSurname"></span></h2>
-						<h2>E-post: <span id="subDetailEmail"></span></h2>
-						<h2>Kuupäev: <span id="subDetailDate"></span></h2>
-						<h2>Kontrolltekst: <span id="subDetailTextTitle"></span></h2>
+						<h2>Nimi: <span data-fill-columns="firstname"></span> <span data-fill-column="surname"></span></h2>
+						<h2>E-post: <span data-fill-columns="email"></span></h2>
+						<h2>Kuupäev: <span data-fill-columns="date"></span></h2>
+						<h2>Kontrolltekst: <span data-fill-columns="textTitle"></span></h2>
 					</td><td>
-						<h2>Vigaseid tähemärke: <span id="subDetailFaultyLetters"></span></h2>
-						<h2>Vigaseid sõnu: <span id="subDetailFaultyWords"></span></h2>
-						<h2>Vigaseid lauseid: <span id="subDetailFaultySentences"></span></h2>
+						<h2>Vigaseid tähemärke: <span data-fill-columns="faultyLetters"></span></h2>
+						<h2>Vigaseid sõnu: <span data-fill-columns="faultyWords"></span></h2>
+						<h2>Vigaseid lauseid: <span data-fill-columns="faultySentences"></span></h2>
 					</td>
 				</tr></table>
 				
-				<h2 id="subDetailText"></h2>
+				<h2 data-fill-columns="report"></h2>
 			</div>
 		</div>
 		
 		<!-- Msg: test delete -->
-		<div class="container" data-nav="msgTestDeleted">
+		<div id="msgTestDeleted" class="container" data-nav-state="hidden">
 			<div >
 				<h1>Etteütlus kustutatud</h1>		
 			</div>
 		</div>
 		
 		<!-- Msg: test cancelled -->
-		<div class="container" data-nav="msgTestCancelled">
+		<div id="msgTestCancelled" class="container" data-nav-state="hidden">
 			<div >
 				<h1>Etteütlus tühistatud</h1>		
 			</div>
 		</div>
 		
 		<!-- Msg: test ended -->
-		<div class="container" data-nav="msgTestEnded">
+		<div id="msgTestEnded" class="container" data-nav-state="hidden">
 			<div >
 				<h1>Etteütlus lõpetatud</h1>		
 			</div>
@@ -200,12 +202,12 @@
 		
 		<!-- Nav -->
 		<div id="nav">		
-			<label data-navFor="textList">Kontrolltekstid</label>
-			<label data-navFor="testList">Etteütlused</label>	
-			<label data-navFor="newText1">Uus Kontrolltekst</label>
-			<label data-navFor="newTest">Uus Etteütlus</label>
+			<label data-nav="#textList">Kontrolltekstid</label>
+			<label data-nav="#testList">Etteütlused</label>	
+			<label data-nav="#newText">Uus Kontrolltekst</label>
+			<label data-nav="#newTest">Uus Etteütlus</label>
 		</div>
 
-		<script type="text/javascript">navigate('testList');</script>
+		<script type="text/javascript">onLoad(function() {navigate('#testList');});</script>
 	</body>
 </html>

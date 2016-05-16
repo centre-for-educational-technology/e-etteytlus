@@ -8,6 +8,7 @@
 	define("db_error_db", 3);
 	define("db_error_table", 4);
 	define("db_error_connect", 5);
+	define("db_error_field", 6);
 	
 	//mysqli wrapper for convenience
 	class dbi {
@@ -16,6 +17,7 @@
 		
 		//optional result arg
 		public $arg;
+		public $arg2;
 		
 		//def constructor
 		public function __construct() {
@@ -34,7 +36,7 @@
 		}
 		
 		public function query($sql) {
-			//echo $sql . "<br><br>";
+			//$this->arg2 = $sql;
 			return $this->mysqli->query($sql);
 		}
 		
@@ -47,7 +49,7 @@
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
 			
-			$sql1 = "INSERT INTO " . $table . " (";
+			$sql1 = "INSERT INTO " . $this->escape($table) . " (";
 			$sql2 = "VALUES (";
 			foreach ($obj as $key => $value) {
 				$sql1 .= $key . ",";
@@ -72,41 +74,52 @@
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
 			
-			$sql = "DELETE FROM " . $table . " WHERE id = " . $this->escape($id);
+			$sql = "DELETE FROM " . $this->escape($table) . " WHERE id = " . $this->escape($id);
 			if ($this->query($sql)) return db_success;
 			return db_error;
 		}
 		
 		//$what is a regular array of column names
 		//$where is a named array "key"=>"value", equals only
-		public function select($table, $what, $where) {
+		//$where optionally "key"=>["operator", "value"]
+		public function select($table, $columns, $where) {
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
 			
 			$sql = "SELECT ";
-			for ($i = 0; $i < count($what); $i++) {
-				$sql .= $this->escape($what[$i]) . ",";
+			for ($i = 0; $i < count($columns); $i++) {
+				$sql .= $this->escape($columns[$i]) . ",";
 			}
-			$sql = rtrim($sql, ",") . " FROM " . $table;
+			$sql = rtrim($sql, ",") . " FROM " . $this->escape($table);
 			
-			if (is_array($where) && count($where)) {
+			if (isset($where) && count($where)) {
 				$sql .= " WHERE ";
 				foreach ($where as $key => $value) {
-					$sql .= $this->escape($key) . "='" . $this->escape($value) . "',";
+					if (is_array($value)) {
+						$sql .= $this->escape($key) . $this->escape($value[0]) . "'" . $this->escape($value[1]) . "',";
+					} else {
+						$sql .= $this->escape($key) . "='" . $this->escape($value) . "',";
+					}	
 				}
 				$sql = rtrim($sql, ",");
 			}
-			$this->arg = $this->query($sql);
+
+			$selector = $this->query($sql);
+			if (!$selector) return db_error;
 			
-			if ($this->arg) return db_success;
-			return db_error;
-		}	
+			$this->arg = [];
+			while ($row = $selector->fetch_assoc()) {
+				array_push($this->arg, $row);
+			}
+			
+			return db_success;
+		}
 
 		public function update($table, $obj) {
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
 			
-			$sql = "UPDATE " . $table . " SET ";
+			$sql = "UPDATE " . $this->escape($table) . " SET ";
 			foreach ($obj as $key => $value) {
 				if ($key == "id") continue;
 				$sql .= $key . "='" . $this->escape($value) . "',";

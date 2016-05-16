@@ -1,5 +1,17 @@
 <?php header('charset=utf-8');
 	require 'levenshtein2.php';
+	
+	
+	
+	
+	
+	
+	$arr = [];
+	$arr[5] = 5;
+	
+	
+	return;
+	
 	$controlText = '
 	"Adalbert, paks koer, kohvi ja moosi ja mustasõstra-veinikastet pealikule ja kiiresti!" hõikas zombistunud kambüüsiülemale kipper Hillar Hurmav, mees, kel kallim igas Läänemere maade sadamas.
 

@@ -26,7 +26,8 @@
 		}
 		public static function dbGetById($id, &$resultValue) {
 			$result = static::dbSelect(array("id"=>$id), $results);
-			if ($result == db_success) {
+
+			if ($result == db_success && count($results)) {
 				$resultValue = $results[0];
 			}
 			return $result;
@@ -36,21 +37,31 @@
 			$result = $dbi->select(static::$table_name, "*", $where);
 				
 			if ($result == db_success) {
-				$selector = $dbi->arg;
 				$results = [];
-				while ($row = $selector->fetch_assoc()) {
-					array_push($results, static::fromRow($row));
+				for ($i = 0; $i < count($dbi->arg); $i++) {
+					$results[] =  static::fromRow($dbi->arg[$i]);
 				}
 			}
 			
 			return $result;
 		}
 		
-		//sql fetched row constructor
 		public static function fromRow($row) {
 			$ret = new static;
-			foreach ($row as $key => $value) $ret->{$key} = $value;
+			foreach ($row as $key => $value) {
+				if (property_exists(static::class, $key)) {
+					$ret->{$key} = $value;
+				}
+			}
 			return $ret;
+		}
+		
+		public function update($row) {
+			foreach ($row as $key => $value) {
+				if (property_exists(static::class, $key)) {
+					$this->{$key} = $value;
+				}
+			}
 		}
 	}
 	
@@ -119,17 +130,21 @@
 			return $result;
 		}
 		
-		public static function fromValues($conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
-			global $dbi;
-			
-			//brute force seek unique code
+		//brute force seek unique code
+		public static function dbGenerateCode() {	
 			$code = "" . rand(1000, 9999);
-			static::dbGetByCode($code, $test);
-			
+			static::dbGetByCode($code, $test);		
 			while ($test != NULL) {
 				$code = "" . rand(1000, 9999);
 				static::dbGetByCode($code, $test);		
 			}
+			return $code;
+		}
+		
+		public static function fromValues($conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public) {
+			global $dbi;
+			$code = dbGenerateCode();
+
 			
 			return static::fromValuesWithCode($code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public);
 		}

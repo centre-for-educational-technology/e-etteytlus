@@ -180,13 +180,27 @@
 		</div>
 		
 		<!-- Nav -->
-		<div id="nav">		
+		<div id="nav" data-hidden>		
 			<label data-nav="#textList">Kontrolltekstid</label>
 			<label data-nav="#testList">Etteütlused</label>	
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
 		</div>
+		
+		<div id="login" class="container">
+			<div class="w400">
+				<h1>E-etteütlus</h1>			
+				<h3>Logi sisse!</h3>
+				<form onsubmit="log_in(event);">
+					<label for="firstname">Kasutajanimi või E-post</label>
+					<input  type="text" id="username" name="username" data-pattern=".{3,}" autocomplete="off" required autofocus>
+					<label for="surname">Parool</label>
+					<input  type="text" id="password" name="password" data-pattern=".{3,}" autocomplete="off" required>
+					<button type="submit">Logi sisse</button>
+				</form>	
+			</div>
+		</div>
 
-		<script type="text/javascript">onLoad(function() {navigate('#testList');});</script>
+		<script type="text/javascript">onLoad(function() {navigate('#login');});</script>
 	</body>
 </html>

@@ -161,3 +161,10 @@ function show_message(bigText, smallText) {
 	if (isdef(smallText)) select("#message h2").innerHTML = smallText;
 	navigate("#message");
 }
+
+function log_in(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	select("#nav").removeAttribute("data-hidden");
+	navigate("#testList");
+}

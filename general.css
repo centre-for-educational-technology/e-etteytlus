@@ -89,6 +89,11 @@ body > * {
 	border-bottom:3px solid rgb(240,240,240);
 	height:34px;
 	transform:none;
+	transition:top 0.5s;
+}
+
+#nav[data-hidden] {
+	top:-50px;
 }
 
 #nav > label {

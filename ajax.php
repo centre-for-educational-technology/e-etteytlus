@@ -1,7 +1,7 @@
 <?php header('charset=utf-8', 'Content-Type: text/plain');
 	require('dbModels.php');
 	require('levenshtein2.php');
-	$current_user = user::fromValues("default", "mc'defaultface", "i prefer gmail", "meh", "keyyboardSMASHIJIRU!", "false");
+	$current_user = user::test_user();
 	
 	//generic return handler
 	function echoResult($db_result, $arg = NULL) {
@@ -15,6 +15,8 @@
 				$result = "error_unique";
 				$arg = $dbi->arg;
 				break;
+			case db_error_unauthorized:
+				$result = "error_unauthorized";
 			default:
 				$result = "error";
 				break;
@@ -26,85 +28,81 @@
 		$first = mb_substr($potential, 0, 1, 'UTF-8');
 		$name = mb_substr($potential, 1, NULL, 'UTF-8');
 		if ($first != "$") return db_success;
-		global $dbi;
-		if (!isset($obj[$name])) return db_error_field;
-		$potential = $obj[$name];
+		if (!property_exists($obj, $name)) return db_error_field;
+		$potential = $obj->$name;
 		return db_success;
 	}
 	
+	function db_select_single($args, &$by_parent_id, &$results) {
+		global $current_user, $dbi;
+		if (!base::columns_allowed($args->columns, action_select, $current_user, $args->table)) return db_error_unauthorized;
+		$table = $args->table;
+		$columns = isset($args->columns) ? $args->columns : ["*"];
+		$where = isset($args->where) ? $args->where : NULL;
+		$parent_id = isset($args->parent_id) ? $args->parent_id : NULL;
+		$id = isset($args->id) ? $args->id : NULL;	
+		
+		if ($parent_id) {
+			if (isset( $by_parent_id[$parent_id] )) {	
+				for ($i = 0; $i < count($columns); $i++) {
+					replaceToken($columns[$i], $by_parent_id[$parent_id]);
+				}
+				foreach ($where as $key => &$value) {
+					replaceToken($value[1], $by_parent_id[$parent_id]);
+				}		
+			}
+		}
+		
+		$result = NULL;		
+		switch($table) {
+			case "users": $result = user::db_select($columns, $where, $results); break;
+			case "texts": $result = text::db_select($columns, $where, $results); break;
+			case "tests": $result = test::db_select($columns, $where, $results); break;
+			case "submissions": 
+				$result = submission::db_select($columns, $where, $results); 
+				if (array_search("report", $columns)) {
+					for ($i = 0; $i < count($results); $i++) {
+						$results[$i]->report = $results[$i]->report->parsed;
+					}
+				}
+				break;
+		}
+		
+		if ($result == db_success && $id && count($results)) {
+			$by_parent_id[$id] = $results[0];
+		}
+		
+		return $result;
+	}
+	
 	function db_select() {
-		global $args, $current_user, $dbi;
-		
-		if (!is_array($args)) $args = array($args);	
-		$result = NULL; 
-		$ret = [];
+		global $args;
 		$by_parent_id = [];
+		$results_all = [];
+		$result = NULL;
 		
-		for ($i = 0; $i < count($args); $i++) {		
-			$query = $args[$i];
-			
-			//non users can only request dateEnd column from tests table until models overhaul
-			if (!$current_user) {
-				if (count($query->columns) != 1) return;
-				if ($query->columns[0] != 'dateEnd') return;
-				if ($query->table != 'tests') return;
-			}
-			
-			if (!isset($query->columns)) {
-				$query->columns = array("*");
-			} elseif (isset($query->parent_id) && isset($by_parent_id[$query->parent_id])) {
-				for ($i = 0; $i < count($query->columns); $i++) {
-					replaceToken($query->columns[$i], $by_parent_id[$query->parent_id]);
-				}
-			}
-
-			
-			if (!isset($query->where)) {
-				$query->where = NULL;
-			} elseif (isset($query->parent_id) && isset($by_parent_id[$query->parent_id])) {
-				$where = [];
-				foreach ($query->where as $key => $value) {
-					replaceToken($key, $by_parent_id[$query->parent_id]);
-					replaceToken($value[1], $by_parent_id[$query->parent_id]);
-					$where[$key] = $value; 
-				}
-				$query->where = $where;			
-			}
-			
-			
-			$result = $dbi->select($query->table, $query->columns, $query->where);
-			if ($result == "db_success") { 
-			
-				if ($query->table == "submissions" && array_search("report", $query->columns) !== false) {
-					for ($j = 0; $j < count($dbi->arg); $j++) {
-						$dbi->arg[$j]["report"] = unserialize($dbi->arg[$j]["report"])->parsed;
-					}		
-				}
-			
-				$ret[] = $dbi->arg;
-				if (count($dbi->arg) && isset($query->id)) {
-					$by_parent_id[$query->id] = $dbi->arg[0];
-				}
+		if (!is_array($args)) $args = array($args);
+		for ($i = 0; $i < count($args); $i++) {
+			$result = db_select_single($args[$i], $by_parent_id, $results);
+			if ($result == db_success) {
+				$results_all[] = $results;
 			} else break;
 		}
-		echoResult($result, $ret);
+
+		echoResult($result, $results_all);
 	}		
 	
 	function db_insert() {
 		global $args, $current_user, $dbi;
-		$item = NULL; $result = db_success;
-		
-		//non users can only insert submissions
-		if (!$current_user) {
-			if ($args->table != "submissions") return;
-		}
-		
+		if (!base::columns_allowed($args, action_insert, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
+		$item = NULL; $result = db_success;	
+
 		switch($args->table) {
 			case "tests": 		
-				$result = text::dbGetById($args->textId, $text);
+				$result = text::db_get_select_id($args->textId, $text);
 				if ($result != db_success) break;
 				
-				$item = test::fromRow($args); 
+				$item = test::from_row($args); 
 				$item->textId = $text->id;
 				$item->textName = $text->title;
 				$item->dateBegin = 0;
@@ -116,31 +114,31 @@
 				break;
 				
 			case "texts": 		
-				$item = text::fromRow($args); 
+				$item = text::from_row($args); 
 				$item->authorId = $current_user->id;
 				$item->authorName = $current_user->fullName();
 				break;
 				
 			case "users": 		
-				$item = user::fromRow($args); 
+				$item = user::from_row($args); 
 				break;
 				
 			case "submissions":	
-				$result = test::dbGetByCode($args->code, $test);
+				$result = test::db_select_by_code($args->code, $test);
 				if ($result != db_success) break;
 				$test->submissions++;
-				$test->dbUpdate();
+				$test->db_update();
 				
 				if ($test->dateBegin > time() || $test->dateEnd < time()) {
-					$result = db_error;
+					$result = db_error_unauthorized;
 					break;
 				}
 				
-				$result = text::dbGetById($test->textId, $text);
+				$result = text::db_get_select_id($test->textId, $text);
 				if ($result != db_success) break;
 				
 				$report = new diffReport($text->text, $args->text);			
-				$item = submission::fromRow($args); 
+				$item = submission::from_row($args); 
 				$item->report = serialize($report);
 				$item->totalSentences = $report->totalSentences;
 				$item->totalWords = $report->totalWords;
@@ -158,7 +156,7 @@
 		}
 		
 		if ($result == db_success) {
-			$result = $item->dbInsert();
+			$result = $item->db_insert();
 		}
 		if ($result == db_success) {
 			echoResult($result, $item->id);
@@ -169,16 +167,16 @@
 
 	function db_update() {
 		global $args, $current_user, $dbi;
+		if (!base::columns_allowed($args, action_update, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
 		$item = NULL; $result = db_success;
 		
-		//non users can't update
-		if (!$current_user) return;
+		
 		
 		switch($args->table) {
-			case "texts": $result = text::dbGetById($args->id, $item); break;
-			case "tests": $result = test::dbGetById($args->id, $item); break;
-			case "users": $result = user::dbGetById($args->id, $item); break;
-			case "submissions": $result = submissions::dbGetById($args->id, $item); break;
+			case "texts": $result = text::db_get_select_id($args->id, $item); break;
+			case "tests": $result = test::db_get_select_id($args->id, $item); break;
+			case "users": $result = user::db_get_select_id($args->id, $item); break;
+			case "submissions": $result = submissions::db_get_select_id($args->id, $item); break;
 		}
 
 		if ($item == NULL) {
@@ -187,7 +185,7 @@
 		}
 		
 		$item->update($args);
-		$result = $item->dbUpdate();
+		$result = $item->db_update();
 		
 		if ($result == db_success) {
 			echoResult($result, $item->id);
@@ -198,9 +196,10 @@
 	
 	function db_delete() {
 		global $args, $current_user, $dbi;
+		if (!base::columns_allowed(["id"], action_delete, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
 		//non users can't delete
 		if (!$current_user) return;
-		$result = $dbi->deleteById($args->table, $args->id);
+		$result = $dbi->delete_by_id($args->table, $args->id);
 		echoResult($result);
 	}
 	

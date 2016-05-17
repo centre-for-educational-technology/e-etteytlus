@@ -42,6 +42,9 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 			if (!isdef(obj)) {
 				safecall(callback_error, {"result":"error_json"});
 			} else if (obj.result == "success") {
+				if (isdef(obj.arg)) {
+					obj = obj.arg;
+				}
 				safecall(callback_success, obj);
 			} else {
 				safecall(callback_error, obj);

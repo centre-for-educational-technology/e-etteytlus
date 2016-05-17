@@ -295,9 +295,8 @@ function data_fill(el) {
 	}
 	
 	ajax("db_select", queries, function(r) {
-		r = r.arg;
 		var tables = [];
-		
+
 		for (var i = 0; i < r.length; i++) {
 			var table = null;
 			for (var j = 0; j < queries_cells[i].length; j++) {

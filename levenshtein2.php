@@ -136,6 +136,10 @@
 		const FLAG_SENTENCE_BEGIN = 32;
 		const FLAG_SENTENCE_END = 64;
 		
+		public function __toString() {
+			return $parsed;
+		}
+		
 		public static function isPunctuation($c) {
 			return preg_match("/[^A-zäöõüåğşÄÖÕÜÅĞŞ]/", $c);
 		}

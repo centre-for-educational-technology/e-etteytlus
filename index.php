@@ -1,15 +1,8 @@
 <?php header('charset=utf-8');
 	require 'levenshtein2.php';
 	
-	
-	
-	
-	
-	
-	$arr = [];
-	$arr[5] = 5;
-	
-	
+		var_dump(unserialize(NULL));
+		
 	return;
 	
 	$controlText = '

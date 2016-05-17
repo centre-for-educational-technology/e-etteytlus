@@ -36,7 +36,7 @@
 				<h3 data-fill-columns="authorName"></h3>
 				<h2 data-fill-columns="text"></h2>
 				
-				<form onsubmit="deleteText(event);">
+				<form onsubmit="delete_text(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
 				</form>			
@@ -56,6 +56,7 @@
 						<th data-fill-table-columns="dateEnd" data-fill-interpreter="interpret_test_status">Staatus</th>
 					</tr>
 				</table>
+				<button type="button" data-nav="#newTest">Lisa Uus</button>
 			</div>
 		</div>
 		
@@ -142,6 +143,10 @@
 						<th data-fill-table-columns="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-fill-interpreter="interpret_submission_result">Tulemus</th>
 					</tr>
 				</table>
+				<form onsubmit="delete_test(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
+					<button type="submit">Kustuta</button>
+				</form>	
 			</div>
 		</div>
 		
@@ -180,7 +185,6 @@
 			<label data-nav="#testList">Etteütlused</label>	
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
-			<label onclick='show_message("hai there", "yeah")'>test</label>
 		</div>
 
 		<script type="text/javascript">onLoad(function() {navigate('#testList');});</script>

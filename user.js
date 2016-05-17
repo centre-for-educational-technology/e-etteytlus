@@ -9,21 +9,32 @@ function submit_user_info(e) {
 	var req = { "table" : "tests", "columns" : ["dateEnd"], "where" : {"code" : data.code} };
 	
 	ajax("db_select", req, function(r) {
-		if (!r.arg.length || !r.arg[0].length || unixTime() > r.arg[0][0].dateEnd) {
-			if (!r.arg.length || !r.arg[0].length || r.arg[0][0].dateEnd > 10000) {
-				navigate("#not_found");
-				show_message("Sellise koodiga etteütlust ei ole olemas või on lõppenud.", "Kontrolli koodi?");
-				navigate_timeout("#user_info", undefined, 6000);	
-			} else {
-				show_message("Etteütlus pole veel alanud!", "Kannatust");
-				navigate_timeout("#user_info", undefined, 4000);
-			}
-		} else {
-			select("#s2ParticipantName").innerHTML = capitalize(data.firstname) + " " + capitalize(data.surname);
-			select("#s2TestCode").innerHTML = data.code;
-			select("#s2TimeRemaining").setAttribute("data-countdown-end", r.arg[0][0].dateEnd);
-			navigate("#dictation");
+		var dateEnd = undefined;
+		try {
+			dateEnd = r[0][0].dateEnd;
+		} catch(e) {
+			show_message("Sellise koodiga etteütlust ei ole olemas", "Kontrolli koodi?");
+			navigate_timeout("#user_info", undefined, 6000);	
+			return;
 		}
+		
+		if (dateEnd < 10000) {
+			show_message("Etteütlus pole veel alanud!", "Kannatust");
+			navigate_timeout("#user_info", undefined, 4000);
+			return;
+		}
+		
+		if (dateEnd < unixTime()) {
+			show_message("Etteütlus on lõppenud.");
+			navigate_timeout("#user_info", undefined, 4000);
+			return;
+		}
+		
+		select("#s2ParticipantName").innerHTML = capitalize(data.firstname) + " " + capitalize(data.surname);
+		select("#s2TestCode").innerHTML = data.code;
+		select("#s2TimeRemaining").setAttribute("data-countdown-end", r.dateEnd);
+		navigate("#dictation");
+		
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame");
 		navigate_timeout("#user_info", undefined, 10000);

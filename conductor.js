@@ -15,11 +15,16 @@ function submit_text(e) {
 		show_message("Kontrolltekst lisatud");
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
-		//TODO
+		if (r.result == "error_unique") {
+			show_message("Sellise nimega tekst on juba olemas!");	
+		} else {
+			show_message("Süsteemi viga", "Vabandame.");	
+		}
+		navigate_timeout("#newText", undefined, 4000);
 	});
 }
 
-function deleteText(e) {
+function delete_text(e) {
 	e.preventDefault();
 	var data = formData(e.target);
 	data.table = "texts";
@@ -27,7 +32,7 @@ function deleteText(e) {
 		show_message("Kontrolltekst kustutatud");
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 
@@ -44,7 +49,6 @@ function interpret_text_select(rows) {
 //	*********
 
 function view_test(row) {
-	console.log("VIEW_TEST");
 	row["status"] = interpret_test_status(row);
 	switch (row.status) {
 		case "Alustamata": 	navigate("#startTest", { "data-fill-where" : "id=" + row.id }); break;
@@ -58,10 +62,11 @@ function start_test(e) {
 	var data = formData(e.target);
 	data["table"] = "tests";
 	ajax("db_insert", data, function(r) {
-		navigate("#startTest", { "data-fill-where" : "id=" + r.arg });
+		console.log(r);
+		navigate("#startTest", { "data-fill-where" : "id=" + r });
 		e.target.reset();
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 
@@ -72,9 +77,9 @@ function conduct_test(e) {
 	data["dateBegin"] = unixTime();
 	data.dateEnd = parseInt(data.dateEnd) * 60 + data.dateBegin; 
 	ajax("db_update", data, function(r) {
-		navigate("#conductTest", { "data-fill-where" : "id=" + r.arg });
+		navigate("#conductTest", { "data-fill-where" : "id=" + r });
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 
@@ -87,7 +92,7 @@ function stop_test(e) {
 		show_message("Etteütlus lõpetatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 
@@ -99,18 +104,19 @@ function cancel_test(e) {
 		show_message("Etteütlus tühistatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 
 function delete_test(e) {
 	e.preventDefault();
+	var data = formData(e.target);
 	data["table"] = "tests";
 	ajax("db_delete", data, function(r) {
 		show_message("Etteütlus kustutatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
-		//TODO
+		show_message("Süsteemi viga", "Vabandame.");
 	});
 }
 

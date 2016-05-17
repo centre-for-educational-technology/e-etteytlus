@@ -9,15 +9,18 @@
 	define("db_error_table", 4);
 	define("db_error_connect", 5);
 	define("db_error_field", 6);
+	define("db_error_unauthorized", 7);
 	
 	//mysqli wrapper for convenience
 	class dbi {
 		//the interface
 		public $mysqli;
+		private $select_db_done = false;
 		
 		//optional result arg
 		public $arg;
 		public $arg2;
+		
 		
 		//def constructor
 		public function __construct() {
@@ -27,19 +30,15 @@
 		//boiler stuff
 		public function create_db() {
 			return $this->mysqli->query("CREATE DATABASE " . db_settings_name . " CHARACTER SET " . db_settings_charset . " COLLATE " . db_settings_collate);
-		}
-		
-		private $select_db_done = false;
+		}		
 		public function select_db() {
 			if ($this->select_db_done) return true;
 			return $this->select_db_done = $this->mysqli->select_db(db_settings_name);	
-		}
-		
+		}	
 		public function query($sql) {
 			//$this->arg2 = $sql;
 			return $this->mysqli->query($sql);
-		}
-		
+		}	
 		public function escape($value) {
 			return $this->mysqli->real_escape_string($value);
 		}
@@ -70,7 +69,7 @@
 			return db_error;
 		}
 		
-		public function deleteById($table, $id) {
+		public function delete_by_id($table, $id) {
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
 			

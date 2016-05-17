@@ -219,14 +219,15 @@
 				<h1>Kasutaja detailid</h1>
 				
 				<form onsubmit="update_user(event);" onreset="reset_user(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<label for="username3">Kasutaja nimi</label>
 					<input  type="text" id="username3" name="username" data-pattern=".{3,}" data-fill-columns="username" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="password3">Parool</label>
 					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">		
 					<label for="permissions3">Õigused</label>
-					<select id="permissions3" name="permissions" data-fill-columns="permissions" data-fill-interpreter="interpret_user_permissions" data-fill-targets="value, data-old-value" autocomplete="off">
+					<select id="permissions3" name="permissions" data-fill-columns="permissions" data-fill-targets="value, data-old-value" autocomplete="off">
 						<option value="1">Juhendaja</option>
-						<option value="3">Administraator</option>
+						<option value="2">Administraator</option>
 					</select>				
 					<label for="firstname3">Eesnimi</label>
 					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">

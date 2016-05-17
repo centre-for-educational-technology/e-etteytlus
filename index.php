@@ -1,7 +1,22 @@
 <?php header('charset=utf-8');
 	require 'levenshtein2.php';
 	
-		var_dump(unserialize(NULL));
+
+	function is_std($x) {
+		$test = function(stdClass $x) {};
+		try {
+			$test($x);
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+		
+	class custom {}
+		
+	$s = "hai";
+	$i = 5;
+	$c = new custom;
+	
 		
 	return;
 	

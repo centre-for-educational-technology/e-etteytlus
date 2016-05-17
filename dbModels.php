@@ -130,6 +130,10 @@
 		public static $table_name = "users";
 		public $id = 0, $firstname, $surname, $email, $username, $passwordHash, $permissions;
 		
+		public function update($row) {
+			parent::update($row);
+			if (isset($row->password)) $this->passwordHash = password_hash($row->password, PASSWORD_BCRYPT, ["cost" => 8]);
+		}
 		public function fullName() {
 			return $this->firstname . " " . $this->surname;
 		}

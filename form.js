@@ -10,7 +10,7 @@ function formVerify(form) {
 //gets form data as object
 function formData(form) {
 	var obj = {};
-	var inputs = form.querySelectorAll("input");
+	var inputs = form.querySelectorAll("input, select, textarea");
 	for (var i = 0; i < inputs.length; i++) {
 		var val = "";
 		switch (inputs[i].type) {
@@ -29,38 +29,13 @@ function formData(form) {
 			obj[inputs[i].name] = val;
 		}	
 	}
-	
-	inputs = form.querySelectorAll("textarea");
-	for (var i = 0; i < inputs.length; i++) {
-		var val = inputs[i].value;
-		if (inputs[i].hasAttribute("data-old-value")) {
-			if (inputs[i].getAttribute("data-old-value") != val) {
-				obj[inputs[i].name] = val;
-			}
-		} else {
-			obj[inputs[i].name] = val;
-		}
-	}
-	
-	inputs = form.querySelectorAll("select");
-	for (var i = 0; i < inputs.length; i++) {
-		val = inputs[i].childNodes[inputs[i].selectedIndex].value;
-		if (inputs[i].hasAttribute("data-old-value")) {
-			if (inputs[i].getAttribute("data-old-value") != val) {
-				obj[inputs[i].name] = val;
-			}
-		} else {
-			obj[inputs[i].name] = val;
-		}
-	}
-
 	return obj;
 }
 
 function formReset(form) {
-	var fields = form.querySelectorAll("input[data-old-value]");
+	var fields = form.querySelectorAll("input[data-old-value] textarea[data-old-value] select[data-old-value]");
 	for (var i = 0; i < fields.length; i++) {
-		switch (inputs[i].type) {
+		switch (fields[i].type) {
 			case "checkbox":
 				fields[i].checked = fields[i].getAttribute("data-old-value"); break;
 			case "radio":
@@ -68,16 +43,6 @@ function formReset(form) {
 			default:
 				fields[i].value = fields[i].getAttribute("data-old-value");
 		}		
-	}
-	
-	var fields = form.querySelectorAll("textarea[data-old-value]");
-	for (var i = 0; i < fields.length; i++) {
-		fields[i].value = fields[i].getAttribute("data-old-value");
-	}
-	
-	var fields = form.querySelectorAll("select[data-old-value]");
-	for (var i = 0; i < fields.length; i++) {
-		fields[i].value = fields[i].getAttribute("data-old-value");
 	}
 }
 

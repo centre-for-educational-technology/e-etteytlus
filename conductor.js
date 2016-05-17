@@ -171,6 +171,7 @@ function submit_user(e) {
 	e.preventDefault();
 	var data = formData(e.target);
 	data["table"] = "users";
+	console.log(data);
 	ajax("db_insert", data, function(r) {
 		e.target.reset();
 		show_message("Kasutaja lisatud");
@@ -194,11 +195,12 @@ function update_user(e) {
 	var data = formData(e.target);
 	data["table"] = "users";
 	ajax("db_update", data, function(r) {
+		e.target.reset();
 		show_message("Kasutaja muudetud");
 		navigate_timeout("#userList", undefined, 2000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
-		navigate_timeout("#conductTest", undefined, 4000);
+		navigate_timeout("#userDetails", undefined, 4000);
 	});
 }
 

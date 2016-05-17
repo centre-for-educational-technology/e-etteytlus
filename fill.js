@@ -242,6 +242,8 @@ function data_fill_targets(el, value, targets) {
 			el.innerHTML = value;
 		} else if (targets[i] == "none") {
 		
+		} else if (targets[i] == "value") {
+			el.value = value;
 		} else {
 			el.setAttribute(targets[i], value);
 		}			

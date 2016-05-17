@@ -121,7 +121,6 @@
 				
 			case "users": 		
 				$item = user::from_row($args); 
-				$item->passwordHash = password_hash($password, PASSWORD_BCRYPT, ["cost" => 8]);
 				break;
 				
 			case "submissions":	
@@ -185,7 +184,7 @@
 			return;
 		}
 		
-		$item->update($args);
+		$item->update($args);	
 		$result = $item->db_update();
 		
 		if ($result == db_success) {
@@ -198,8 +197,6 @@
 	function db_delete() {
 		global $args, $current_user, $dbi;
 		if (!base::columns_allowed(["id"], action_delete, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
-		//non users can't delete
-		if (!$current_user) return;
 		$result = $dbi->delete_by_id($args->table, $args->id);
 		echoResult($result);
 	}

@@ -33,22 +33,6 @@
 			</div>	
 		</div>
 		
-		<!-- not ready -->
-		<div id="not_ready" class="container" data-nav-state="hidden">
-			<div class="w500 msg">
-				<h1>Etteütlus pole veel alanud!</h1>
-				<h2>Kannatust</h2>
-			</div>
-		</div>
-		
-		<!-- not found -->
-		<div id="not_found" class="container" data-nav-state="hidden">
-			<div class="w800 msg">
-				<h1>Sellise koodiga etteütlust ei ole olemas või on lõppenud.</h1>
-				<h2>Kontrolli koodi?</h2>
-			</div>
-		</div>
-		
 		<!-- dictation -->
 		<div id="dictation" class="container" data-nav-state="hidden">
 			<div class="w800">
@@ -58,27 +42,18 @@
 				</h1>
 				<h2>Juhend etteütluse sooritajale...</h2>
 
-				<form onsubmit="submitDictation(event);">
+				<form onsubmit="submit_dictation(event);">
 					<textarea name="text" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-pattern=".{3,}" required></textarea>
 					<button type="submit">Saada tekst</button>
 				</form>
 			</div>
 		</div>
 		
-		
-		<!-- complete -->
-		<div id="complete" class="container" data-nav-state="hidden">
-			<div class="w300 msg">
-				<h1>Etteütlus sooritatud!</h1>
-				<h2>Täname osalemise eest.</h2>
-			</div>
-		</div>
-		
-		<!-- system fault -->
-		<div id="system_fault" class="container" data-nav-state="hidden">
-			<div class="w300 msg">
-				<h1>Süsteemi viga.</h1>
-				<h2>Vabandame</h2>
+		<!-- Message -->
+		<div id="message" class="container" data-nav-state="hidden">
+			<div class="msg">
+				<h1></h1>
+				<h2></h2>
 			</div>
 		</div>
 

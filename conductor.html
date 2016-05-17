@@ -25,6 +25,7 @@
 						<th data-fill-table-columns="authorName">Autor</th>
 					</tr>
 				</table>
+				<button type="button" data-nav="#newText">Lisa Uus</button>
 			</div>
 		</div>
 		
@@ -39,13 +40,6 @@
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
 				</form>			
-			</div>
-		</div>
-		
-		<!-- Msg: text delete -->
-		<div id="msgTextDeleted" class="container" data-nav-state="hidden">
-			<div>
-				<h1>Kontrolltekst kustutatud</h1>		
 			</div>
 		</div>
 		
@@ -77,13 +71,6 @@
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
-			</div>
-		</div>
-		
-		<!-- Msg: text add -->
-		<div id="msgTextAdded" class="container" data-nav-state="hidden">
-			<div >
-				<h1>Kontrolltekst lisatud</h1>		
 			</div>
 		</div>
 	
@@ -179,24 +166,11 @@
 			</div>
 		</div>
 		
-		<!-- Msg: test delete -->
-		<div id="msgTestDeleted" class="container" data-nav-state="hidden">
-			<div >
-				<h1>Etteütlus kustutatud</h1>		
-			</div>
-		</div>
-		
-		<!-- Msg: test cancelled -->
-		<div id="msgTestCancelled" class="container" data-nav-state="hidden">
-			<div >
-				<h1>Etteütlus tühistatud</h1>		
-			</div>
-		</div>
-		
-		<!-- Msg: test ended -->
-		<div id="msgTestEnded" class="container" data-nav-state="hidden">
-			<div >
-				<h1>Etteütlus lõpetatud</h1>		
+		<!-- Message -->
+		<div id="message" class="container" data-nav-state="hidden">
+			<div class="msg">
+				<h1></h1>
+				<h2></h2>
 			</div>
 		</div>
 		
@@ -206,6 +180,7 @@
 			<label data-nav="#testList">Etteütlused</label>	
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
+			<label onclick='show_message("hai there", "yeah")'>test</label>
 		</div>
 
 		<script type="text/javascript">onLoad(function() {navigate('#testList');});</script>

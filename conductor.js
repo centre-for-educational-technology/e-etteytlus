@@ -12,7 +12,7 @@ function submit_text(e) {
 	data["table"] = "texts";
 	ajax("db_insert", data, function(r) {
 		e.target.reset();
-		navigate("#msgTextAdded");
+		show_message("Kontrolltekst lisatud");
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
 		//TODO
@@ -24,7 +24,7 @@ function deleteText(e) {
 	var data = formData(e.target);
 	data.table = "texts";
 	ajax("db_delete", data, function(r) {
-		navigate("#msgTextDeleted");
+		show_message("Kontrolltekst kustutatud");
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
 		//TODO
@@ -84,7 +84,7 @@ function stop_test(e) {
 	data["table"] = "tests";
 	data["dateEnd"] = unixTime();
 	ajax("db_update", data, function(r) {
-		navigate("#msgTestEnded");
+		show_message("Etteütlus lõpetatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		//TODO
@@ -96,7 +96,7 @@ function cancel_test(e) {
 	var data = formData(e.target);
 	data["table"] = "tests";
 	ajax("db_delete", data, function(r) {
-		navigate("#msgTestCancelled");
+		show_message("Etteütlus tühistatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		//TODO
@@ -107,7 +107,7 @@ function delete_test(e) {
 	e.preventDefault();
 	data["table"] = "tests";
 	ajax("db_delete", data, function(r) {
-		navigate("#msgTestDeleted");
+		show_message("Etteütlus kustutatud");
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		//TODO
@@ -146,5 +146,12 @@ function interpret_submissions_where(row) {
 }
 
 
+//	************
+//	  UTILITY
+//	************
 
-
+function show_message(bigText, smallText) {
+	if (isdef(bigText)) select("#message h1").innerHTML = bigText;
+	if (isdef(smallText)) select("#message h2").innerHTML = smallText;
+	navigate("#message");
+}

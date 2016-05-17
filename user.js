@@ -1,6 +1,5 @@
 var submissionData = {};
 
-//step 1
 function submit_user_info(e) {
 	e.preventDefault();
 	if (!formVerify(e.target)) return;
@@ -13,9 +12,10 @@ function submit_user_info(e) {
 		if (!r.arg.length || !r.arg[0].length || unixTime() > r.arg[0][0].dateEnd) {
 			if (!r.arg.length || !r.arg[0].length || r.arg[0][0].dateEnd > 10000) {
 				navigate("#not_found");
+				show_message("Sellise koodiga etteütlust ei ole olemas või on lõppenud.", "Kontrolli koodi?");
 				navigate_timeout("#user_info", undefined, 6000);	
 			} else {
-				navigate("#not_ready");
+				show_message("Etteütlus pole veel alanud!", "Kannatust");
 				navigate_timeout("#user_info", undefined, 4000);
 			}
 		} else {
@@ -25,13 +25,12 @@ function submit_user_info(e) {
 			navigate("#dictation");
 		}
 	}, function(r) {
-		navigate("#system_fault");
+		show_message("Süsteemi viga", "Vabandame");
 		navigate_timeout("#user_info", undefined, 10000);
 	});
 }
 
-//step 2
-function submitDictation(e) {
+function submit_dictation(e) {
 	e.preventDefault();
 	if (!formVerify(e.target)) return;
 	var data = formData(e.target);
@@ -39,11 +38,21 @@ function submitDictation(e) {
 	submissionData["table"] = "submissions";
 	
 	ajax("db_insert", submissionData, function(r) {		
-		navigate("#complete");
+		show_message("Etteütlus sooritatud!", "Täname osalemise eest.");
 	}, function(r) {
-		navigate("#system_fault");
+		show_message("Süsteemi viga", "Vabandame");
 		navigate_timeout("#user_info", undefined, 10000);
 	});
 	
 	
+}
+
+//	************
+//	  UTILITY
+//	************
+
+function show_message(bigText, smallText) {
+	if (isdef(bigText)) select("#message h1").innerHTML = bigText;
+	if (isdef(smallText)) select("#message h2").innerHTML = smallText;
+	navigate("#message");
 }

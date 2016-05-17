@@ -74,6 +74,14 @@ body > * {
 	text-align:center;
 }
 
+.contentTest {
+	pointer-events:none;
+	opacity:0;
+	position:static;
+	left:100%;
+	top:100%;
+}
+
 /* Nav */
 #nav {
 	position:fixed;

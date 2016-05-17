@@ -136,16 +136,15 @@
 				
 				$result = text::db_get_select_id($test->textId, $text);
 				if ($result != db_success) break;
-				
-				$report = new diffReport($text->text, $args->text);			
+					
 				$item = submission::from_row($args); 
-				$item->report = serialize($report);
-				$item->totalSentences = $report->totalSentences;
-				$item->totalWords = $report->totalWords;
-				$item->totalLetters = $report->totalLetters;
-				$item->faultySentences = $report->faultySentences;
-				$item->faultyWords = $report->faultyWords;
-				$item->faultyLetters = $report->faultyLetters;
+				$item->report = new diffReport($text->text, $args->text);	
+				$item->totalSentences = $item->report->totalSentences;
+				$item->totalWords = $item->report->totalWords;
+				$item->totalLetters = $item->report->totalLetters;
+				$item->faultySentences = $item->report->faultySentences;
+				$item->faultyWords = $item->report->faultyWords;
+				$item->faultyLetters = $item->report->faultyLetters;
 				$item->date = time();
 				$item->testId = $test->id;
 				$item->testCode = $test->code;

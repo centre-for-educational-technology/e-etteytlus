@@ -33,7 +33,7 @@ function formData(form) {
 }
 
 function formReset(form) {
-	var fields = form.querySelectorAll("input[data-old-value] textarea[data-old-value] select[data-old-value]");
+	var fields = form.querySelectorAll("input[data-old-value], textarea[data-old-value], select[data-old-value]");
 	for (var i = 0; i < fields.length; i++) {
 		switch (fields[i].type) {
 			case "checkbox":

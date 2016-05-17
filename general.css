@@ -96,6 +96,10 @@ body > * {
 	top:-50px;
 }
 
+.nav > label[data-hidden] {
+	display:none;
+}
+
 .nav > label {
 	box-sizing:border-box;
 	display:inline-block;

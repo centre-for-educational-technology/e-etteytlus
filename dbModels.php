@@ -21,7 +21,9 @@
 			if ($result == db_success) {
 				$results = [];
 				for ($i = 0; $i < count($dbi->arg); $i++) {
-					$results[] =  static::from_row($dbi->arg[$i]);
+					$item = static::from_row($dbi->arg[$i]);
+					foreach ($item as $key => $value) if (!isset($value)) unset($item->$key);
+					$results[] = $item; 
 				}
 			}		
 			return $result;
@@ -105,7 +107,9 @@
 		public static function db_select($columns, $where, &$results) {
 			$result = parent::db_select($columns, $where, $results);
 			for ($i = 0; $i < count($results); $i++) {
-				$results[$i]->report = unserialize($results[$i]->report);
+				if (isset($results[$i]->report)) {
+					$results[$i]->report = unserialize($results[$i]->report);
+				}
 			}
 			return $result;
 		}

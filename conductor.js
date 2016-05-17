@@ -277,11 +277,19 @@ function start_page() {
 			case "conduct":
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
+				var admin = document.querySelectorAll(".admin");
+				for (var i = 0; i < admin.length; i++) {
+					admin[i].setAttribute("data-hidden", "");
+				}
 				navigate("#testList");
 				break;
 			case "admin":
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
+				var admin = document.querySelectorAll(".admin");
+				for (var i = 0; i < admin.length; i++) {
+					admin[i].removeAttribute("data-hidden");
+				}
 				navigate("#testList");
 				break;
 			default:

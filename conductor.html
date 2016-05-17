@@ -185,6 +185,7 @@
 			<label data-nav="#testList">Etteütlused</label>	
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
+			<label onclick="log_out()">Logi välja</label>
 		</div>
 		
 		<div id="login" class="container">
@@ -195,12 +196,12 @@
 					<label for="firstname">Kasutajanimi või E-post</label>
 					<input  type="text" id="username" name="username" data-pattern=".{3,}" autocomplete="off" required autofocus>
 					<label for="surname">Parool</label>
-					<input  type="text" id="password" name="password" data-pattern=".{3,}" autocomplete="off" required>
+					<input  type="password" id="password" name="password" data-pattern=".{3,}" autocomplete="off" required>
 					<button type="submit">Logi sisse</button>
 				</form>	
 			</div>
 		</div>
 
-		<script type="text/javascript">onLoad(function() {navigate('#login');});</script>
+		<script type="text/javascript">onLoad(function() {start_page();});</script>
 	</body>
 </html>

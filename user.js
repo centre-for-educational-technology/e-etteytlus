@@ -32,7 +32,7 @@ function submit_user_info(e) {
 		
 		select("#s2ParticipantName").innerHTML = capitalize(data.firstname) + " " + capitalize(data.surname);
 		select("#s2TestCode").innerHTML = data.code;
-		select("#s2TimeRemaining").setAttribute("data-countdown-end", r.dateEnd);
+		select("#s2TimeRemaining").setAttribute("data-countdown-end", dateEnd);
 		navigate("#dictation");
 		
 	}, function(r) {

@@ -33,14 +33,17 @@ function delete_text(e) {
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#textDetail", undefined, 4000);
 	});
 }
 
 function interpret_text_select(rows) {
+	if (rows.constructor !== Array) rows = [rows];
 	var ret = "";
 	for (var i = 0; i < rows.length; i++) {
 		ret += "<option value='" + rows[i].id + "'>" + rows[i].title + "</option>";
 	}
+	console.log(ret);
 	return ret;
 }
 
@@ -67,6 +70,7 @@ function start_test(e) {
 		e.target.reset();
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#startTest", undefined, 4000);
 	});
 }
 
@@ -80,6 +84,7 @@ function conduct_test(e) {
 		navigate("#conductTest", { "data-fill-where" : "id=" + r });
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#startTest", undefined, 4000);
 	});
 }
 
@@ -93,6 +98,7 @@ function stop_test(e) {
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#conductTest", undefined, 4000);
 	});
 }
 
@@ -105,6 +111,7 @@ function cancel_test(e) {
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#testList", undefined, 4000);
 	});
 }
 
@@ -117,6 +124,7 @@ function delete_test(e) {
 		navigate_timeout("#testList", undefined, 2000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#testDetail", undefined, 4000);
 	});
 }
 
@@ -157,14 +165,60 @@ function interpret_submissions_where(row) {
 //	************
 
 function show_message(bigText, smallText) {
-	if (isdef(bigText)) select("#message h1").innerHTML = bigText;
-	if (isdef(smallText)) select("#message h2").innerHTML = smallText;
+	select("#message h1").innerHTML = isdef(bigText) ? bigText : "";
+	select("#message h2").innerHTML = isdef(smallText) ? smallText : "";
 	navigate("#message");
 }
 
 function log_in(e) {
 	e.preventDefault();
+	if (!formVerify(e.target)) return;
 	var data = formData(e.target);
-	select("#nav").removeAttribute("data-hidden");
-	navigate("#testList");
+	ajax("log_in", data, function(r) {
+		e.target.reset();
+		select("#nav").removeAttribute("data-hidden");
+		navigate("#testList");
+	}, function(r) {
+		if (r.result == "error_unauthorized") {
+			show_message("Vale kasutaja või parool.");
+			navigate_timeout("#login", undefined, 4000);
+		} else {
+			show_message("Süsteemi viga", "Vabandame.");
+			navigate_timeout("#login", undefined, 4000);
+		}
+	});
+}
+
+function log_out() {
+	ajax("log_out", {}, function(r) {
+		h = (new Date()).getHours();
+		s = "ööd"; if (h>4&&h<=10)s="hommikut.";if(h>10&&h<=19)s="päeva";if(h>19&&h<23)s="õhtut";
+		show_message("Olete välja logitud.", "Head " + s);
+		select("#nav").setAttribute("data-hidden", "");
+		navigate_timeout("#login", undefined, 4000);
+	}, function(r) {
+		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#testList", undefined, 4000);
+	});
+}
+
+function start_page() {
+	ajax("get_permissions", {}, function(r) {
+		switch (r) {
+			case "conduct":
+				select("#nav").removeAttribute("data-hidden");
+				navigate("#testList");
+				break;
+			case "admin":
+				select("#nav").removeAttribute("data-hidden");
+				navigate("#testList");
+				break;
+			default:
+				navigate('#login');
+				break;
+		}
+	}, function(r) {
+		show_message("Süsteemis esinevad hetkel rikked.", "Vabandame.");
+		navigate_timeout("#login", undefined, 4000);
+	});			
 }

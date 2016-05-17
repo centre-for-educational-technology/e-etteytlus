@@ -1,7 +1,6 @@
 <?php header('charset=utf-8', 'Content-Type: text/plain');
 	require('dbModels.php');
 	require('levenshtein2.php');
-	$current_user = user::test_user();
 	
 	//generic return handler
 	function echoResult($db_result, $arg = NULL) {
@@ -17,6 +16,7 @@
 				break;
 			case db_error_unauthorized:
 				$result = "error_unauthorized";
+				break;
 			default:
 				$result = "error";
 				break;
@@ -203,11 +203,56 @@
 		echoResult($result);
 	}
 	
+	function log_in() {
+		global $args, $dbi;
+		$result = user::select_by_credentials($args->username, $args->password, $usr);
+		if ($result == db_success) {		
+			$_SESSION["current_user"] = $usr;
+			$_SESSION["default_user"] = false;
+			$_SESSION["timeout"] = time() + 3600;	
+			echoResult(db_success);
+		} else {
+			echoResult(db_error_unauthorized);
+		}
+	}
+	
+	function log_out() {
+		$_SESSION["current_user"] = user::default_user();
+		$_SESSION["default_user"] = true;
+		$_SESSION["timeout"] = 0;
+		echoResult("db_success");
+	}
+	
+	function get_permissions() {
+		global $current_user;
+		switch($current_user->permissions) {
+			case permissions_take_test: echoResult(db_success, "take_test"); break;
+			case permissions_conduct: echoResult(db_success, "conduct"); break;
+			case permissions_admin: echoResult(db_success, "admin"); break;
+		}
+	}
+	
+	//	SESSION
+	session_start();
+
+	if (!isset($_SESSION["current_user"])) log_out();
+	
+	if ($_SESSION["default_user"] == false) {
+		if ($_SESSION["timeout"] < time()) log_out();
+		else $_SESSION["timeout"] = time() + 3600;
+	}
+	
+	$current_user = $_SESSION["current_user"];
+	
+	//	JUNCTION
 	$args = json_decode(file_get_contents("php://input"));
 	switch ($_GET["method"]) {
-		case "db_select": db_select(); break;
-		case "db_insert": db_insert(); break;
-		case "db_update": db_update(); break;
-		case "db_delete": db_delete(); break;
+		case "db_select": 		db_select(); 		break;
+		case "db_insert": 		db_insert(); 		break;
+		case "db_update": 		db_update(); 		break;
+		case "db_delete": 		db_delete(); 		break;
+		case "log_in":			log_in(); 			break;
+		case "log_out":			log_out();			break;
+		case "get_permissions":	get_permissions();	break;
 	}
 ?>

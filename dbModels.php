@@ -133,15 +133,32 @@
 		public function fullName() {
 			return $this->firstname . " " . $this->surname;
 		}
-		public static function test_user() {
+		public static function default_user() {
 			$usr = new static;
-			$usr->firstname = "default";
-			$usr->surname = "mc'defaultface";
-			$usr->email = "i prefer gmail";
-			$usr->username = "meh";
-			$usr->passwordHash = "keyyboardSMASHIJIRU!";
-			$usr->permissions = permissions_admin;
+			$usr->permissions = permissions_take_test;
 			return $usr;
+		}
+		public static function create_new($username, $password, $permissions, $firstname, $surname, $email) {
+			$usr = new static;
+			$usr->username = $username;
+			$usr->passwordHash = password_hash($password, PASSWORD_BCRYPT, ["cost" => 8]);
+			$usr->permissions = $permissions;
+			$usr->firstname = $firstname;
+			$usr->surname = $surname;
+			$usr->email = $email;
+			return $usr;
+		}
+		public static function select_by_credentials($username, $password, &$usr) {
+			$result = static::db_select(["*"], array("username" => $username), $results);
+			if (!$result == db_success || !count($results)) {
+				$result = static::db_select(["*"], array("email" => $username), $results);
+				if (!$result == db_success || !count($results)) {
+					return db_error_unauthorized;
+				}
+			}
+			$usr = $results[0];
+			if (password_verify($password, $usr->passwordHash)) return db_success;
+			return db_error_unauthorized;
 		}
 	}
 	
@@ -178,6 +195,7 @@
 	
 	//deploy macro
 	function db_deploy() {
+		
 		global $dbi;
 		if (!$dbi->mysqli) return "Failed to connect. " . $dbi->mysqli->error;
 		if ($dbi->select_db()) return "Database already exists.";
@@ -191,7 +209,7 @@
 			email VARCHAR(".db_settings_uKeyLen.") UNIQUE,
 			username VARCHAR(".db_settings_uKeyLen.") UNIQUE,
 			passwordHash CHAR(60),
-			permissions INT,
+			permissions INT
 		)")) return "Failed to create user table. " . $dbi->mysqli->error;
 		
 		if (!$dbi->query("CREATE TABLE " . text::$table_name . " (
@@ -235,6 +253,9 @@
 			faultyLetters INT
 		)")) return "Failed to create submission table. " . $dbi->mysqli->error;
 		
-		return "Deployed successfully";
+		$usr = user::create_new("admin", "1234", permissions_admin, "", "", "");
+		if ($usr->db_insert() != db_success) return "Failed to create default user. " . $dbi->mysqli->error;
+		
+		return "Deployed successfully, created default administrator, username = 'admin', password = '1234'";
 	}
 ?>

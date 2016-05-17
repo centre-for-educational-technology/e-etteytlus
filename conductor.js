@@ -134,6 +134,7 @@ function interpret_test_status(row) {
 	return "Lõppenud";
 }
 
+
 function interpret_conduct_view_details(row) {
 	return "navigate('#testDetail', {'data-fill-where' : 'id=" + row.id + "'})";
 }
@@ -171,7 +172,6 @@ function submit_user(e) {
 	e.preventDefault();
 	var data = formData(e.target);
 	data["table"] = "users";
-	console.log(data);
 	ajax("db_insert", data, function(r) {
 		e.target.reset();
 		show_message("Kasutaja lisatud");

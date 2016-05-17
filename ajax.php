@@ -35,10 +35,10 @@
 	
 	function db_select_single($args, &$by_parent_id, &$results) {
 		global $current_user, $dbi;
-		if (!base::columns_allowed($args->columns, action_select, $current_user, $args->table)) return db_error_unauthorized;
 		$table = $args->table;
 		$columns = isset($args->columns) ? $args->columns : ["*"];
 		$where = isset($args->where) ? $args->where : NULL;
+		if (!base::columns_allowed($columns, action_select, $table, $where)) return db_error_unauthorized;
 		$parent_id = isset($args->parent_id) ? $args->parent_id : NULL;
 		$id = isset($args->id) ? $args->id : NULL;	
 		
@@ -94,7 +94,7 @@
 	
 	function db_insert() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed($args, action_insert, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
+		if (!base::columns_allowed($args, action_insert, $args->table)) { echoResult(db_error_unauthorized); return; }
 		$item = NULL; $result = db_success;	
 
 		switch($args->table) {
@@ -166,7 +166,7 @@
 
 	function db_update() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed($args, action_update, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
+		if (!base::columns_allowed($args, action_update, $args->table, array("id" => $args->id))) { echoResult(db_error_unauthorized); return; }
 		$item = NULL; $result = db_success;
 		
 		
@@ -195,7 +195,7 @@
 	
 	function db_delete() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed(["id"], action_delete, $current_user, $args->table)) { echoResult(db_error_unauthorized); return; }
+		if (!base::columns_allowed(["id"], action_delete, $args->table, array("id" => $args->id))) { echoResult(db_error_unauthorized); return; }
 		$result = $dbi->delete_by_id($args->table, $args->id);
 		echoResult($result);
 	}

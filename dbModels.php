@@ -62,9 +62,10 @@
 		}	
 		
 		//user permissions
-		public static function 	column_allowed($column, $action, $usr, $model = NULL) {
+		public static function 	column_allowed($column, $action, $model = NULL, $where = NULL) {
+			global $current_user;
 			if (!isset($model)) $model = get_called_class();
-			$permissions = $usr->permissions;
+			$permissions = $current_user->permissions;
 					
 			switch ($permissions) {
 				case permissions_take_test:
@@ -74,7 +75,18 @@
 					if ($action == action_select) return $model == "test" && column == "dateEnd";
 					break;
 				case permissions_conduct:
-					return $model != "user";
+					if ($model == "user") {
+						if (isdef($where)) {
+							foreach ($where as $key => $value) {
+								if ($key == "id" && $value == $current_user->id) {
+									return true;
+								}
+							}
+						} else {
+							return false;
+						}		
+					}
+					return false;
 					break;
 				case permissions_admin:
 					return true;
@@ -83,16 +95,16 @@
 			
 			return false;
 		}
-		public static function 	columns_allowed($columns, $action, $user, $model = NULL) {
+		public static function 	columns_allowed($columns, $action, $model = NULL, $where = NULL) {
 			if (!isset($model)) $model = get_called_class();
 			global $dbi;
 			if (is_array($columns) && array_keys($columns) === range(0, count($columns) - 1)) {
 				for ($i = 0; $i < count($columns); $i++) {
-					if (!static::column_allowed($columns[$i], $action, $user)) return false;
+					if (!static::column_allowed($columns[$i], $action, $model, $where)) return false;
 				}
 			} else {
 				foreach ($columns as $key => $value) {
-					if (!static::column_allowed($key, $action, $user)) return false;
+					if (!static::column_allowed($key, $action, $model, $where)) return false;
 				}
 			}
 			return true;

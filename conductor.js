@@ -159,6 +159,73 @@ function interpret_submissions_where(row) {
 	return "testId="+row.id;
 }
 
+//	**********
+//	  USERS
+//	**********
+
+function view_user(row) {
+	navigate("#userDetail", {"data-fill-where" : "id=" + row.id});
+}
+
+function submit_user(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	data["table"] = "users";
+	ajax("db_insert", data, function(r) {
+		e.target.reset();
+		show_message("Kasutaja lisatud");
+		navigate_timeout("#userList", undefined, 2000);
+	}, function(r) {
+		if (r.result == "error_unique") {
+			if (r.arg == "username") {
+				show_message("Sellise kasutajanimega tegelane on juba olemas!");	
+			} else {
+				show_message("Sellise E-posti aadressiga tegelane on juba olemas!");
+			}
+		} else {
+			show_message("Süsteemi viga", "Vabandame.");	
+		}
+		navigate_timeout("#newUser", undefined, 4000);
+	});
+}
+
+function update_user(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	data["table"] = "users";
+	ajax("db_update", data, function(r) {
+		show_message("Kasutaja muudetud");
+		navigate_timeout("#userList", undefined, 2000);
+	}, function(r) {
+		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#conductTest", undefined, 4000);
+	});
+}
+
+function reset_user(e) {
+	e.preventDefault();
+	formReset(e.target);
+}
+
+function delete_user(e) {
+	e.preventDefault();
+	var data = formData(e.target);
+	data["table"] = "users";
+	ajax("db_delete", data, function(r) {
+		show_message("Kasutaja kustutatud");
+		navigate_timeout("#userList", undefined, 2000);
+	}, function(r) {
+		show_message("Süsteemi viga", "Vabandame.");
+		navigate_timeout("#userDetail", undefined, 4000);
+	});
+}
+
+function interpret_user_permissions(row) {
+	if (row.permissions == 0) return "Õigusteta";
+	if (row.permissions == 1) return "Juhendaja";
+	if (row.permissions == 2) return "Administraator";
+}
+
 
 //	************
 //	  UTILITY
@@ -176,8 +243,7 @@ function log_in(e) {
 	var data = formData(e.target);
 	ajax("log_in", data, function(r) {
 		e.target.reset();
-		select("#nav").removeAttribute("data-hidden");
-		navigate("#testList");
+		start_page();
 	}, function(r) {
 		if (r.result == "error_unauthorized") {
 			show_message("Vale kasutaja või parool.");
@@ -194,7 +260,8 @@ function log_out() {
 		h = (new Date()).getHours();
 		s = "ööd"; if (h>4&&h<=10)s="hommikut.";if(h>10&&h<=19)s="päeva";if(h>19&&h<23)s="õhtut";
 		show_message("Olete välja logitud.", "Head " + s);
-		select("#nav").setAttribute("data-hidden", "");
+		select(".nav").setAttribute("data-hidden", "");
+		select(".nav.right").setAttribute("data-hidden", "");
 		navigate_timeout("#login", undefined, 4000);
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
@@ -206,11 +273,13 @@ function start_page() {
 	ajax("get_permissions", {}, function(r) {
 		switch (r) {
 			case "conduct":
-				select("#nav").removeAttribute("data-hidden");
+				select(".nav").removeAttribute("data-hidden");
+				select(".nav.right").removeAttribute("data-hidden");
 				navigate("#testList");
 				break;
 			case "admin":
-				select("#nav").removeAttribute("data-hidden");
+				select(".nav").removeAttribute("data-hidden");
+				select(".nav.right").removeAttribute("data-hidden");
 				navigate("#testList");
 				break;
 			default:

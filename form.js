@@ -12,27 +12,73 @@ function formData(form) {
 	var obj = {};
 	var inputs = form.querySelectorAll("input");
 	for (var i = 0; i < inputs.length; i++) {
+		var val = "";
 		switch (inputs[i].type) {
 			case "checkbox":
-				obj[inputs[i].name] = inputs[i].checked; break;
+				val = inputs[i].checked; break;
 			case "radio":
-				if (inputs[i].checked) obj[inputs[i].name] = inputs[i].value; break;
+				if (inputs[i].checked) val = inputs[i].value; break;
 			default:
-				obj[inputs[i].name] = inputs[i].value;
+				val = inputs[i].value;
 		}
+		if (inputs[i].hasAttribute("data-old-value")) {
+			if (inputs[i].getAttribute("data-old-value") != val) {
+				obj[inputs[i].name] = val;
+			}
+		} else {
+			obj[inputs[i].name] = val;
+		}	
 	}
 	
 	inputs = form.querySelectorAll("textarea");
 	for (var i = 0; i < inputs.length; i++) {
-		obj[inputs[i].name] = inputs[i].value;
+		var val = inputs[i].value;
+		if (inputs[i].hasAttribute("data-old-value")) {
+			if (inputs[i].getAttribute("data-old-value") != val) {
+				obj[inputs[i].name] = val;
+			}
+		} else {
+			obj[inputs[i].name] = val;
+		}
 	}
 	
 	inputs = form.querySelectorAll("select");
 	for (var i = 0; i < inputs.length; i++) {
-		obj[inputs[i].name] = inputs[i].childNodes[inputs[i].selectedIndex].value;
+		val = inputs[i].childNodes[inputs[i].selectedIndex].value;
+		if (inputs[i].hasAttribute("data-old-value")) {
+			if (inputs[i].getAttribute("data-old-value") != val) {
+				obj[inputs[i].name] = val;
+			}
+		} else {
+			obj[inputs[i].name] = val;
+		}
 	}
 
 	return obj;
+}
+
+function formReset(form) {
+	var fields = form.querySelectorAll("input[data-old-value]");
+	for (var i = 0; i < fields.length; i++) {
+		switch (inputs[i].type) {
+			case "checkbox":
+				fields[i].checked = fields[i].getAttribute("data-old-value"); break;
+			case "radio":
+				fields[i].checked = fields[i].getAttribute("data-old-value"); break;
+			default:
+				fields[i].value = fields[i].getAttribute("data-old-value");
+		}		
+	}
+	
+	var fields = form.querySelectorAll("textarea[data-old-value]");
+	for (var i = 0; i < fields.length; i++) {
+		fields[i].value = fields[i].getAttribute("data-old-value");
+	}
+	
+	var fields = form.querySelectorAll("select[data-old-value]");
+	for (var i = 0; i < fields.length; i++) {
+		fields[i].value = fields[i].getAttribute("data-old-value");
+	}
 }
 
 //gets state targets which is the element itself + labels for element

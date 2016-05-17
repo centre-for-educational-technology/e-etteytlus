@@ -83,7 +83,7 @@ body > * {
 }
 
 /* Nav */
-#nav {
+.nav {
 	position:fixed;
 	left:15px; top:0px;
 	border-bottom:3px solid rgb(240,240,240);
@@ -92,11 +92,11 @@ body > * {
 	transition:top 0.5s;
 }
 
-#nav[data-hidden] {
+.nav[data-hidden] {
 	top:-50px;
 }
 
-#nav > label {
+.nav > label {
 	box-sizing:border-box;
 	display:inline-block;
 	padding:0px;
@@ -108,16 +108,21 @@ body > * {
 	cursor:pointer;
 }
 
-#nav > label:last-child {
+.nav > label:last-child {
 	margin-right:0;
 }
 
-#nav label[data-checked] {
+.nav label[data-checked] {
 	border-color:rgb(64,128,196);
 }
 
-#nav > label:hover {
+.nav > label:hover {
 	border-color:rgb(128,180,255);
+}
+
+.nav.right {
+	left:auto;
+	right:15px;
 }
 
 /* Basic styling */

@@ -171,6 +171,80 @@
 			</div>
 		</div>
 		
+		<!-- User list -->
+		<div id="userList" class="container" data-nav-state="hidden">
+			<div class="w800">
+				<h1>Kasutajad</h1>	
+				<table data-fill-table="users" data-fill-on-rowclick="view_user">
+					<tr data-fill-table-columns-silent="id">
+						<th data-fill-table-columns="firstname">Eesnimi</th>
+						<th data-fill-table-columns="surname">Perenimi</th>
+						<th data-fill-table-columns="email">E-post</th>
+						<th data-fill-table-columns="permissions" data-fill-interpreter="interpret_user_permissions">Õigused</th>
+					</tr>
+				</table>
+				<button type="button" data-nav="#newUser">Lisa Uus</button>
+			</div>
+		</div>
+		
+		<!-- New user -->
+		<div id="newUser" class="container" data-nav-state="hidden">
+			<div class="w400">
+				<h1>Lisa uus kasutaja</h1>
+				<form onsubmit="submit_user(event);">
+					<label for="username2">Kasutaja nimi</label>
+					<input  type="text" id="username2" name="username" data-pattern=".{3,}" autocomplete="off" required>
+					<label for="password2">Parool</label>
+					<input  type="password" id="password2" name="password" data-pattern=".{3,}" autocomplete="off" required>		
+					<label for="permissions2">Õigused</label>
+					<select id="permissions2" name="permissions" autocomplete="off" required>
+						<option value="1">Juhendaja</option>
+						<option value="2">Administraator</option>
+					</select>				
+					<label for="firstname2">Eesnimi</label>
+					<input  type="text" id="firstname2" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
+					<label for="surname2">Perenimi</label>
+					<input  type="text" id="surname2" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
+					<label for="email2">E-posti aadress</label>
+					<input  type="email" id="email2" name="email" data-pattern=".@." autocomplete="off" required>
+					<button type="submit">Salvesta</button>
+					<button type="reset">Tühista</button>
+				</form>
+			</div>
+		</div>
+		
+		<!-- User detail -->
+		<div id="userDetail" class="container" data-fill-table="users" data-nav-state="hidden">
+			<div class="w400">
+				<h1>Kasutaja detailid</h1>
+				
+				<form onsubmit="update_user(event);" onreset="reset_user(event);">
+					<label for="username3">Kasutaja nimi</label>
+					<input  type="text" id="username3" name="username" data-pattern=".{3,}" data-fill-columns="username" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="password3">Parool</label>
+					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">		
+					<label for="permissions3">Õigused</label>
+					<select id="permissions3" name="permissions" data-fill-columns="permissions" data-fill-interpreter="interpret_user_permissions" data-fill-targets="value, data-old-value" autocomplete="off">
+						<option value="1">Juhendaja</option>
+						<option value="3">Administraator</option>
+					</select>				
+					<label for="firstname3">Eesnimi</label>
+					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="surname3">Perenimi</label>
+					<input  type="text" id="surname3" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="surname" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="email3">E-posti aadress</label>
+					<input  type="email" id="email3" name="email" data-pattern=".@." data-fill-columns="email" data-fill-targets="value, data-old-value" autocomplete="off">
+					<button type="submit">Salvesta</button>
+					<button type="reset">Tühista</button>
+				</form>
+				
+				<form onreset="delete_user(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
+					<button type="reset">Kustuta</button>
+				</form>			
+			</div>
+		</div>
+		
 		<!-- Message -->
 		<div id="message" class="container" data-nav-state="hidden">
 			<div class="msg">
@@ -180,22 +254,28 @@
 		</div>
 		
 		<!-- Nav -->
-		<div id="nav" data-hidden>		
+		<div class="nav" data-hidden>		
 			<label data-nav="#textList">Kontrolltekstid</label>
 			<label data-nav="#testList">Etteütlused</label>	
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
-			<label onclick="log_out()">Logi välja</label>
+			
+		</div>
+		<div class="nav right" data-hidden>		
+			<label data-nav="#userList">Kasutajad</label>
+			<label data-nav="#newUser">Uus Kasutaja</label>
+			<label class="right" onclick="log_out()">Logi välja</label>
 		</div>
 		
+		<!-- Log in -->
 		<div id="login" class="container">
 			<div class="w400">
 				<h1>E-etteütlus</h1>			
 				<h3>Logi sisse!</h3>
 				<form onsubmit="log_in(event);">
-					<label for="firstname">Kasutajanimi või E-post</label>
+					<label for="username">Kasutajanimi või E-post</label>
 					<input  type="text" id="username" name="username" data-pattern=".{3,}" autocomplete="off" required autofocus>
-					<label for="surname">Parool</label>
+					<label for="password">Parool</label>
 					<input  type="password" id="password" name="password" data-pattern=".{3,}" autocomplete="off" required>
 					<button type="submit">Logi sisse</button>
 				</form>	

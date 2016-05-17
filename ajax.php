@@ -121,6 +121,7 @@
 				
 			case "users": 		
 				$item = user::from_row($args); 
+				$item->passwordHash = password_hash($password, PASSWORD_BCRYPT, ["cost" => 8]);
 				break;
 				
 			case "submissions":	

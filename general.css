@@ -129,6 +129,66 @@ body > * {
 	right:15px;
 }
 
+/* table */
+
+.ascdesc:hover, .sortable:hover, .sortable:hover::after {
+	color:rgb(64,120,160);
+}
+
+.sortable {
+	position:relative;
+	transition:color 0.2s;
+}
+
+.sortable[data-searchable], .sortable[data-searchable]::after {
+	color:rgba(0,0,0,0);
+}
+
+.sortable::after {
+	content:"\1f50d";
+	margin-left:5px;
+	color:rgba(96,96,96,0);
+	transition:color 0.2s;
+}
+
+.ascdesc{
+	position:absolute;
+	right:0px;
+	top:1px;
+	color:rgb(96,96,96);
+	font-size:16px;
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+}
+
+
+
+
+.search {
+	position:absolute;
+	left:0px;
+	top:0px;
+	width:85%;
+	background-color:transparent;
+	
+	outline:none;
+	border:none;
+	font:12px 'Open Sans';
+	opacity:0;
+	transition:opacity 0.2s;
+	cursor:default;
+}
+
+[data-searchable] .search {
+	opacity:1;
+	cursor:auto;
+}
+
+
+
 /* Basic styling */
 p {
 	display:inline;
@@ -181,6 +241,12 @@ table {
 th, td {
 	text-align:left;
 	padding:4px;
+	transition: padding 0.3s, font-size 0.3s;
+}
+
+[data-hidden] td {
+	padding: 0px 4px;
+	font-size:0px;
 }
 
 th {

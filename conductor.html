@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="form.css">
 		<link rel="stylesheet" href="conductor.css">
 		<script src="util.js" charset="utf-8"></script>
+		<script src="table.js" charset="utf-8"></script>
 		<script src="fill.js" charset="utf-8"></script>
 		<script src="nav.js" charset="utf-8"></script>
 		<script src="form.js" charset="utf-8"></script>
@@ -21,8 +22,8 @@
 				<h1>Kontrolltekstid</h1>	
 				<table data-fill-table="texts" data-fill-on-rowclick="view_text">
 					<tr data-fill-table-columns-silent="id">
-						<th data-fill-table-columns="title">Pealkiri</th>
-						<th data-fill-table-columns="authorName">Autor</th>
+						<th data-fill-table-columns="title" data-table-sorter>Pealkiri</th>
+						<th data-fill-table-columns="authorName" data-table-sorter>Autor</th>
 					</tr>
 				</table>
 				<button type="button" data-nav="#newText">Lisa Uus</button>
@@ -49,11 +50,11 @@
 				<h1>Etteütlused</h1>
 					<table data-fill-table="tests" data-fill-on-rowclick="view_test">
 					<tr data-fill-table-columns-silent="id">
-						<th data-fill-table-columns="code">Kood</th>
-						<th data-fill-table-columns="submissions">Esitatud töid</th>
-						<th data-fill-table-columns="conductorName">Juhendaja</th>
-						<th data-fill-table-columns="textName">Kontrolltekst</th>
-						<th data-fill-table-columns="dateEnd" data-fill-interpreter="interpret_test_status">Staatus</th>
+						<th data-fill-table-columns="code" data-table-sorter>Kood</th>
+						<th data-fill-table-columns="submissions" data-table-sorter>Esitatud töid</th>
+						<th data-fill-table-columns="conductorName" data-table-sorter>Juhendaja</th>
+						<th data-fill-table-columns="textName" data-table-sorter>Kontrolltekst</th>
+						<th data-fill-table-columns="dateEnd" data-fill-interpreter="interpret_test_status" data-table-sorter>Staatus</th>
 					</tr>
 				</table>
 				<button type="button" data-nav="#newTest">Lisa Uus</button>
@@ -137,10 +138,10 @@
 				<h1>E-etteütlus <span data-fill-columns="code"></span> "<span data-fill-columns="textName"></span>"</h1>
 				<table data-fill-table="submissions" data-fill-where="testId = $id" data-fill-on-rowclick="view_submission">
 					<tr data-fill-table-columns-silent="id">
-						<th data-fill-table-columns="surname">Perenimi</th>
-						<th data-fill-table-columns="firstname">Eesnimi</th>
-						<th data-fill-table-columns="email">E-post</th>
-						<th data-fill-table-columns="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-fill-interpreter="interpret_submission_result">Tulemus</th>
+						<th data-fill-table-columns="surname" data-table-sorter>Perenimi</th>
+						<th data-fill-table-columns="firstname" data-table-sorter>Eesnimi</th>
+						<th data-fill-table-columns="email" data-table-sorter>E-post</th>
+						<th data-fill-table-columns="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-fill-interpreter="interpret_submission_result" data-table-sorter>Tulemus</th>
 					</tr>
 				</table>
 				<form onsubmit="delete_test(event);">
@@ -177,10 +178,10 @@
 				<h1>Kasutajad</h1>	
 				<table data-fill-table="users" data-fill-on-rowclick="view_user">
 					<tr data-fill-table-columns-silent="id">
-						<th data-fill-table-columns="firstname">Eesnimi</th>
-						<th data-fill-table-columns="surname">Perenimi</th>
-						<th data-fill-table-columns="email">E-post</th>
-						<th data-fill-table-columns="permissions" data-fill-interpreter="interpret_user_permissions">Õigused</th>
+						<th data-fill-table-columns="firstname" data-table-sorter>Eesnimi</th>
+						<th data-fill-table-columns="surname" data-table-sorter>Perenimi</th>
+						<th data-fill-table-columns="email" data-table-sorter>E-post</th>
+						<th data-fill-table-columns="permissions" data-fill-interpreter="interpret_user_permissions" data-table-sorter>Õigused</th>
 					</tr>
 				</table>
 				<button type="button" data-nav="#newUser">Lisa Uus</button>

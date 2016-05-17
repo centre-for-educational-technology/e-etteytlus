@@ -149,7 +149,7 @@ function view_submission(row) {
 
 function interpret_submission_result(row) {
 	var resultPerc = Math.floor((row.totalLetters - row.faultyLetters) / row.totalLetters * 100) + "%";
-	var resultRep = "<table>";
+	var resultRep = "<table class='nsel'>";
 	resultRep += "<tr><td>Vigaseid tähemärke:</td><td>" + row.faultyLetters + " / " + row.totalLetters + "</td>";
 	resultRep += "<tr><td>Vigaseid sõnu:</td><td>" + row.faultyWords + " / " + row.totalWords + "</td>";
 	resultRep += "<tr><td>Vigaseid lauseid:</td><td>" + row.faultySentences + " / " + row.totalSentences + "</td>";

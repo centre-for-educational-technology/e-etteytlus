@@ -52,6 +52,7 @@ function navigate(selector, set_attributes) {
 				sibling.setAttribute(key, set_attributes[key]);
 			}		
 			data_fill(sibling);
+			formUnvalidate(sibling);
 			sibling.setAttribute("data-nav-state", "visible");
 		} else if (before) {
 			sibling.setAttribute("data-nav-state", "hiddenBefore");

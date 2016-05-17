@@ -46,6 +46,14 @@ function formReset(form) {
 	}
 }
 
+function formUnvalidate(form) {
+	fields = form.querySelectorAll("*");
+	for (var i = 0; i < fields.length; i++) {
+		if (fields[i].hasAttribute("data-valid")) fields[i].removeAttribute("data-valid");
+		if (fields[i].hasAttribute("data-invalid")) fields[i].removeAttribute("data-invalid");
+	}
+}
+
 //gets state targets which is the element itself + labels for element
 function getFormElementTargets(el) {
 	var targets = [el];

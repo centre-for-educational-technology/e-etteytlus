@@ -1,14 +1,7 @@
 <?php header('charset=utf-8');
 	require("db.php");
+	require("permissions.php");
 
-	define("permissions_take_test", 0);
-	define("permissions_conduct", 1);
-	define("permissions_admin", 2);
-	
-	define("action_select", 0);
-	define("action_insert", 1);
-	define("action_update", 2);
-	define("action_delete", 3);
 	
 	//base class for model based tables
 	class base {
@@ -60,55 +53,6 @@
 				}
 			}
 		}	
-		
-		//user permissions
-		public static function 	column_allowed($column, $action, $model = NULL, $where = NULL) {
-			global $current_user;
-			if (!isset($model)) $model = get_called_class();
-			$permissions = $current_user->permissions;
-					
-			switch ($permissions) {
-				case permissions_take_test:
-					if ($action == action_update) return false;
-					if ($action == action_delete) return false;
-					if ($action == action_insert) return $model == "submission";
-					if ($action == action_select) return $model == "test" && column == "dateEnd";
-					break;
-				case permissions_conduct:
-					if ($model == "user") {
-						if (isdef($where)) {
-							foreach ($where as $key => $value) {
-								if ($key == "id" && $value == $current_user->id) {
-									return true;
-								}
-							}
-						} else {
-							return false;
-						}		
-					}
-					return false;
-					break;
-				case permissions_admin:
-					return true;
-					break;
-			}
-			
-			return false;
-		}
-		public static function 	columns_allowed($columns, $action, $model = NULL, $where = NULL) {
-			if (!isset($model)) $model = get_called_class();
-			global $dbi;
-			if (is_array($columns) && array_keys($columns) === range(0, count($columns) - 1)) {
-				for ($i = 0; $i < count($columns); $i++) {
-					if (!static::column_allowed($columns[$i], $action, $model, $where)) return false;
-				}
-			} else {
-				foreach ($columns as $key => $value) {
-					if (!static::column_allowed($key, $action, $model, $where)) return false;
-				}
-			}
-			return true;
-		}
 	}
 	
 	//test submission model

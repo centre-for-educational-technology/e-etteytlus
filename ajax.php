@@ -38,7 +38,7 @@
 		$table = $args->table;
 		$columns = isset($args->columns) ? $args->columns : ["*"];
 		$where = isset($args->where) ? $args->where : NULL;
-		if (!base::columns_allowed($columns, action_select, $table, $where)) return db_error_unauthorized;
+		if (!permissions::evaluate($table, $columns, $where, action_select)) return db_error_unauthorized;
 		$parent_id = isset($args->parent_id) ? $args->parent_id : NULL;
 		$id = isset($args->id) ? $args->id : NULL;	
 		
@@ -94,7 +94,7 @@
 	
 	function db_insert() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed($args, action_insert, $args->table)) { echoResult(db_error_unauthorized); return; }
+		if (!permissions::evaluate($args->table, $args, NULL, action_insert)) { echoResult(db_error_unauthorized); return; }
 		$item = NULL; $result = db_success;	
 
 		switch($args->table) {
@@ -166,7 +166,7 @@
 
 	function db_update() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed($args, action_update, $args->table, array("id" => $args->id))) { echoResult(db_error_unauthorized); return; }
+		if (!permissions::evaluate($args->table, $args, array("id" => $args->id), action_update)) { echoResult(db_error_unauthorized); return; }
 		$item = NULL; $result = db_success;
 		
 		
@@ -195,7 +195,7 @@
 	
 	function db_delete() {
 		global $args, $current_user, $dbi;
-		if (!base::columns_allowed(["id"], action_delete, $args->table, array("id" => $args->id))) { echoResult(db_error_unauthorized); return; }
+		if (!permissions::evaluate($args->table, ["id"], array("id" => $args->id), action_delete)) { echoResult(db_error_unauthorized); return; }
 		$result = $dbi->delete_by_id($args->table, $args->id);
 		echoResult($result);
 	}
@@ -222,11 +222,7 @@
 	
 	function get_permissions() {
 		global $current_user;
-		switch($current_user->permissions) {
-			case permissions_take_test: echoResult(db_success, "take_test"); break;
-			case permissions_conduct: echoResult(db_success, "conduct"); break;
-			case permissions_admin: echoResult(db_success, "admin"); break;
-		}
+		echoResult(db_success, array($current_user->id, $current_user->permissions));
 	}
 	
 	//	SESSION

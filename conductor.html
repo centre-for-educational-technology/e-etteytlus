@@ -212,9 +212,10 @@
 				</form>
 			</div>
 		</div>
-		
+
 		<!-- User detail -->
 		<div id="userDetail" class="container" data-fill-table="users" data-nav-state="hidden">
+			
 			<div class="w400">
 				<h1>Kasutaja detailid</h1>
 				
@@ -263,6 +264,7 @@
 			
 		</div>
 		<div class="nav right" data-hidden>		
+			<label id="edit_user_self_button" onclick="edit_user_self()">Minu kasutaja</label>
 			<label class="admin" data-nav="#userList">Kasutajad</label>
 			<label class="admin" data-nav="#newUser">Uus Kasutaja</label>
 			<label onclick="log_out()">Logi välja</label>

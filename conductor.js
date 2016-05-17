@@ -197,11 +197,19 @@ function update_user(e) {
 	ajax("db_update", data, function(r) {
 		e.target.reset();
 		show_message("Kasutaja muudetud");
-		navigate_timeout("#userList", undefined, 2000);
+		if (user_permissions == 1) {
+			navigate_timeout("#userDetail", undefined, 2000);
+		} else {
+			navigate_timeout("#userList", undefined, 2000);
+		}	
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
-		navigate_timeout("#userDetails", undefined, 4000);
+		navigate_timeout("#userDetail", undefined, 4000);
 	});
+}
+
+function edit_user_self() {
+	view_user( {"id" : user_id} );
 }
 
 function reset_user(e) {
@@ -273,8 +281,10 @@ function log_out() {
 
 function start_page() {
 	ajax("get_permissions", {}, function(r) {
-		switch (r) {
-			case "conduct":
+		window["user_id"] = r[0];
+		window["user_permissions"] = r[1];
+		switch (r[1]) {
+			case "1":
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
 				var admin = document.querySelectorAll(".admin");
@@ -283,7 +293,7 @@ function start_page() {
 				}
 				navigate("#testList");
 				break;
-			case "admin":
+			case "2":
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
 				var admin = document.querySelectorAll(".admin");

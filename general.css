@@ -190,6 +190,15 @@ body > * {
 
 
 /* Basic styling */
+
+.line {
+	clear:both;
+	margin-top:20px;
+	width:100%;
+	height:1px;
+	background-color: rgb(220,220,220);
+}
+
 p {
 	display:inline;
 	margin:0;

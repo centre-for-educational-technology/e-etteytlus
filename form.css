@@ -70,6 +70,12 @@ button {
 	background-color:rgb(160, 220, 245);
 }
 
+button.left {
+	float:left;
+	margin-left:0;
+	margin-right:10px;
+}
+
 button[type="reset"] {
 	background-color:rgb(255,128,128);
 } button[type="reset"]:hover {

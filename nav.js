@@ -38,7 +38,12 @@ function navigate_is_same_hierarchy(el1, el2) {
 	return false;
 }
 
-function navigate(selector, set_attributes) {	
+function navigate(selector, set_attributes, no_history) {	
+	if (no_history != true && history.active == true) {
+		var state = {"selector": selector, "set_attributes": set_attributes};
+		history.pushState(state, null, "");
+	}
+	
 	var el = select(selector);
 	if (!el) return;
 	var siblings = el.parentNode.childNodes;
@@ -93,4 +98,10 @@ onLoad(function() {
 	Array.prototype.forEach.call(buttons, function(button) {
 		navigate_register(button);
 	});
+});
+
+addEventListener("popstate", function(e) {
+	if (history.active != true) return;
+	if (!isdef(e.state.selector)) return;
+	navigate(e.state.selector, e.state.set_attributes, true);
 });

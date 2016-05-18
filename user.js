@@ -65,5 +65,5 @@ function submit_dictation(e) {
 function show_message(bigText, smallText) {
 	if (isdef(bigText)) select("#message h1").innerHTML = bigText;
 	if (isdef(smallText)) select("#message h2").innerHTML = smallText;
-	navigate("#message");
+	navigate("#message", undefined, true);
 }

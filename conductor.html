@@ -26,6 +26,7 @@
 						<th data-fill-table-columns="authorName" data-table-sorter>Autor</th>
 					</tr>
 				</table>
+				<div class="line"></div>
 				<button type="button" data-nav="#newText">Lisa Uus</button>
 			</div>
 		</div>
@@ -36,11 +37,12 @@
 				<h1 data-fill-columns="title"></h1>
 				<h3 data-fill-columns="authorName"></h3>
 				<h2 data-fill-columns="text"></h2>
-				
+				<div class="line"></div>
 				<form onsubmit="delete_text(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
-				</form>			
+				</form>	
+				<button class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
 		
@@ -57,6 +59,7 @@
 						<th data-fill-table-columns="dateEnd" data-fill-interpreter="interpret_test_status" data-table-sorter>Staatus</th>
 					</tr>
 				</table>
+				<div class="line"></div>
 				<button type="button" data-nav="#newTest">Lisa Uus</button>
 			</div>
 		</div>
@@ -123,11 +126,11 @@
 				<h2>Aega jäänud:</h2>
 				<h4 data-fill-columns="dateEnd" data-fill-targets="data-countdown-end" data-countdown-end="0"></h4>
 				
-				
+				<div class="line"></div>
 				<form onsubmit="stop_test(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Lõpeta</button>
-				</form>
+				</form>			
 				<button type="button" data-fill-columns="id" data-fill-targets="onclick" data-fill-interpreter="interpret_conduct_view_details">Esitatud tööd</button>
 			</div>
 		</div>
@@ -144,10 +147,13 @@
 						<th data-fill-table-columns="totalLetters, totalWords, totalSentences, faultyLetters, faultyWords, faultySentences" data-fill-interpreter="interpret_submission_result" data-table-sorter>Tulemus</th>
 					</tr>
 				</table>
+				<div class="line"></div>
 				<form onsubmit="delete_test(event);">
+					<button type="button" class="left" onclick="history.back()">Tagasi</button>
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
 				</form>	
+				
 			</div>
 		</div>
 		
@@ -169,6 +175,8 @@
 				</tr></table>
 				
 				<h2 data-fill-columns="report"></h2>
+				<div class="line"></div>
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
 		
@@ -211,6 +219,8 @@
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
+				
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
 
@@ -244,7 +254,8 @@
 				<form onreset="delete_user(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="reset">Kustuta</button>
-				</form>			
+				</form>		
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>				
 			</div>
 		</div>
 		

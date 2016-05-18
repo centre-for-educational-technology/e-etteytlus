@@ -43,7 +43,6 @@ function interpret_text_select(rows) {
 	for (var i = 0; i < rows.length; i++) {
 		ret += "<option value='" + rows[i].id + "'>" + rows[i].title + "</option>";
 	}
-	console.log(ret);
 	return ret;
 }
 
@@ -244,7 +243,7 @@ function interpret_user_permissions(row) {
 function show_message(bigText, smallText) {
 	select("#message h1").innerHTML = isdef(bigText) ? bigText : "";
 	select("#message h2").innerHTML = isdef(smallText) ? smallText : "";
-	navigate("#message");
+	navigate("#message", undefined, true);
 }
 
 function log_in(e) {
@@ -267,6 +266,10 @@ function log_in(e) {
 
 function log_out() {
 	ajax("log_out", {}, function(r) {
+		history.active = false;
+		for (var i = history.resetTo; i < history.length; i++) {
+			history.back();
+		}
 		h = (new Date()).getHours();
 		s = "ööd"; if (h>4&&h<=10)s="hommikut.";if(h>10&&h<=19)s="päeva";if(h>19&&h<23)s="õhtut";
 		show_message("Olete välja logitud.", "Head " + s);
@@ -284,7 +287,7 @@ function start_page() {
 		window["user_id"] = r[0];
 		window["user_permissions"] = r[1];
 		switch (r[1]) {
-			case "1":
+			case "1":		
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
 				var admin = document.querySelectorAll(".admin");
@@ -292,8 +295,9 @@ function start_page() {
 					admin[i].setAttribute("data-hidden", "");
 				}
 				navigate("#testList");
+				history.active = true;
 				break;
-			case "2":
+			case "2":			
 				select(".nav").removeAttribute("data-hidden");
 				select(".nav.right").removeAttribute("data-hidden");
 				var admin = document.querySelectorAll(".admin");
@@ -301,9 +305,11 @@ function start_page() {
 					admin[i].removeAttribute("data-hidden");
 				}
 				navigate("#testList");
+				history.active = true;
 				break;
 			default:
 				navigate('#login');
+				history.active = false;
 				break;
 		}
 	}, function(r) {
@@ -311,3 +317,4 @@ function start_page() {
 		navigate_timeout("#login", undefined, 4000);
 	});			
 }
+history.resetTo = history.length;

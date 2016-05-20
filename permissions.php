@@ -32,6 +32,7 @@
 		public static function evaluate_conductor($table, $columns, $where, $action) {
 			global $current_user;
 			if ($table == "users") {
+				if (array_search("passwordHash", $columns) !== false) return false;
 				if (!test_key("id", $where, $current_user->id)) return false;			
 				if ($action != action_select && test_key("permissions", $columns)) return false;
 			}
@@ -39,6 +40,7 @@
 		}
 		
 		public static function evaluate_admin($table, $columns, $where, $action) {
+			if (array_search("passwordHash", $columns) !== false) return false;
 			return true;
 		}
 		

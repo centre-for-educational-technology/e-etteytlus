@@ -16,23 +16,25 @@ function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 //timeout_ms = integer, optional
 function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 	//console.log("AJAX: " + method);
+	if (ajax.complete == false) return;		//limits this to 1 concurrent interaction, if greater flexibility is needed in the future, come up with a better solution.
+	var ajax.complete = false;
 	if (!isdef(obj)) obj = {};
     var request = new XMLHttpRequest();
-	var complete = false;
+	
 	
 	if (isdef(timeout_ms)) {
 		setTimeout(function() {
-			if (complete) return;
-			complete = true;
+			if (ajax.complete) return;
+			ajax.complete = true;
 			safecall(callback_error, {"result":"error_timeout"});
 		}, timeout_ms);
 	}
 	
     request.onreadystatechange = function () {
-		if (complete) return;
+		if (ajax.complete) return;
         if (request.readyState == 4 && request.status == 200) {
 			console.log("RESPONSE: " + request.responseText);	
-			complete = true;
+			ajax.complete = true;
 			var obj;
 			try {
 				obj = JSON.parse(request.responseText);
@@ -50,7 +52,7 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 				safecall(callback_error, obj);
 			}
         } else if (request.status == 404) {
-			complete = true;
+			ajax.complete = true;
 			safecall(callback_error, {"result":"error_404"});
 		}
     };

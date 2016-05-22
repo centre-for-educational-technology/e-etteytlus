@@ -8,17 +8,19 @@
 	define("action_update", 2);
 	define("action_delete", 3);
 	
-	function test_key($key, $collection, $value = NULL) {
-		if (!isset($collection)) return false;
-		if (is_array($collection) && array_keys($collection) === range(0, count($collection) - 1)) return array_search($key, $collection) !== false;
-		foreach ($collection as $key2 => $value2) {
-			if ($key2 == $key) {
-				if (!isset($value)) return true;
-				if (is_array($value2)) return $value == $value2[1];
-				return $value == $value2;
+	function test_key($namedCollection, $key, $value) {
+		$good = false;
+		foreach($namedCollection as $key2 => $value2) {
+			if ($key2 == $key) {			
+				if (is_array($value2)) {
+					if ($value2[0] != "=" || $value2[1] != $value) return false;
+				} else {
+					if ($value2 != $value) return false;
+				}
+				$good = true;
 			}
 		}
-		return false;
+		return good;
 	}
 	
 	class permissions {
@@ -33,8 +35,8 @@
 			global $current_user;
 			if ($table == "users") {
 				if (array_search("passwordHash", $columns) !== false) return false;
-				if (!test_key("id", $where, $current_user->id)) return false;			
-				if ($action != action_select && test_key("permissions", $columns)) return false;
+				if (array_search("permissions", $columns) !== false) return false;
+				if (!test_key($where, "id", $current_user->id)) return false;			
 			}
 			return true;
 		}

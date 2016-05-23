@@ -1,0 +1,7 @@
+DirectoryIndex user.html
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule admin conductor.html [NC,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule conductor conductor.html [NC,L]

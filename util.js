@@ -17,7 +17,7 @@ function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 	//console.log("AJAX: " + method);
 	if (ajax.complete == false) return;		//limits this to 1 concurrent interaction, if greater flexibility is needed in the future, come up with a better solution.
-	var ajax.complete = false;
+	ajax.complete = false;
 	if (!isdef(obj)) obj = {};
     var request = new XMLHttpRequest();
 	

@@ -240,7 +240,37 @@
 					<select id="permissions3" name="permissions" data-fill-columns="permissions" data-fill-targets="value, data-old-value" autocomplete="off">
 						<option value="1">Juhendaja</option>
 						<option value="2">Administraator</option>
-					</select>				
+					</select>	
+					<label for="firstname3">Eesnimi</label>
+					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="surname3">Perenimi</label>
+					<input  type="text" id="surname3" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="surname" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="email3">E-posti aadress</label>
+					<input  type="email" id="email3" name="email" data-pattern=".@." data-fill-columns="email" data-fill-targets="value, data-old-value" autocomplete="off">
+					<button type="submit">Salvesta</button>
+					<button type="reset">Tühista</button>
+				</form>
+				
+				<form onreset="delete_user(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
+					<button type="reset">Kustuta</button>
+				</form>		
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>				
+			</div>
+		</div>
+		
+		<!-- My user detail -->
+		<div id="myUserDetail" class="container" data-fill-table="users" data-nav-state="hidden">
+			
+			<div class="w400">
+				<h1>Minu kasutaja</h1>
+				
+				<form onsubmit="update_user(event);" onreset="reset_user(event);">
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
+					<label for="username3">Kasutaja nimi</label>
+					<input  type="text" id="username3" name="username" data-pattern=".{3,}" data-fill-columns="username" data-fill-targets="value, data-old-value" autocomplete="off">
+					<label for="password3">Parool</label>
+					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">		
 					<label for="firstname3">Eesnimi</label>
 					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="surname3">Perenimi</label>
@@ -276,7 +306,7 @@
 			
 		</div>
 		<div class="nav right" data-hidden>		
-			<label id="edit_user_self_button" onclick="edit_user_self()">Minu kasutaja</label>
+			<label data-nav="#myUserDetail">Minu kasutaja</label>
 			<label class="admin" data-nav="#userList">Kasutajad</label>
 			<label class="admin" data-nav="#newUser">Uus Kasutaja</label>
 			<label onclick="log_out()">Logi välja</label>

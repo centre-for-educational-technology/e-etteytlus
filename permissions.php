@@ -8,20 +8,27 @@
 	define("action_update", 2);
 	define("action_delete", 3);
 	
-	function test_key($namedCollection, $key, $value) {
-		$good = false;
-		foreach($namedCollection as $key2 => $value2) {
-			if ($key2 == $key) {			
-				if (is_array($value2)) {
-					if ($value2[0] != "=" || $value2[1] != $value) return false;
-				} else {
-					if ($value2 != $value) return false;
-				}
-				$good = true;
+	function get_key($collection, $key, &$value) {
+		if (is_array($collection)) {
+			if (array_keys($collection) === range(0, count($collection) - 1)) return array_search($key, $collection);
+			if (array_key_exists($key, $collection)) {
+				$value = $collection[$key];
+				return true;
 			}
+			return false;
 		}
-		return good;
+		if (property_exists($collection, $key)) {
+			$value = $collection->$key;
+			return true;
+		}
+		return false;
 	}
+	
+	function test_value($testable, $op, $value) {		
+		if (is_array($testable)) return $testable[0] == $op && $testable[1] == $value;
+		return $op == "=" && $testable == $value;
+	}
+	
 	
 	class permissions {
 		
@@ -34,15 +41,16 @@
 		public static function evaluate_conductor($table, $columns, $where, $action) {
 			global $current_user;
 			if ($table == "users") {
-				if (array_search("passwordHash", $columns) !== false) return false;
-				if (array_search("permissions", $columns) !== false) return false;
-				if (!test_key($where, "id", $current_user->id)) return false;			
+				if (get_key($columns, "passwordHash", $value)) return false;
+				if (get_key($columns, "permissions", $value)) return false;
+				if (!get_key($where, "id", $value)) return false;
+				if (!test_value($value, "=", $current_user->id)) return false;		
 			}
 			return true;
 		}
 		
 		public static function evaluate_admin($table, $columns, $where, $action) {
-			if (array_search("passwordHash", $columns) !== false) return false;
+			if (get_key($columns, "passwordHash", $value)) return false;
 			return true;
 		}
 		

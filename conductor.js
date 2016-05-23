@@ -197,7 +197,7 @@ function update_user(e) {
 		e.target.reset();
 		show_message("Kasutaja muudetud");
 		if (user_permissions == 1) {
-			navigate_timeout("#userDetail", undefined, 2000);
+			navigate_timeout("#myUserDetail", undefined, 2000);
 		} else {
 			navigate_timeout("#userList", undefined, 2000);
 		}	
@@ -287,23 +287,25 @@ function start_page() {
 		window["user_id"] = r[0];
 		window["user_permissions"] = r[1];
 		switch (r[1]) {
-			case "1":		
-				select(".nav").removeAttribute("data-hidden");
-				select(".nav.right").removeAttribute("data-hidden");
+			case "1":					
 				var admin = document.querySelectorAll(".admin");
 				for (var i = 0; i < admin.length; i++) {
 					admin[i].setAttribute("data-hidden", "");
 				}
+				select("#myUserDetail").setAttribute("data-fill-where", "id=" + user_id);
+				select(".nav").removeAttribute("data-hidden");
+				select(".nav.right").removeAttribute("data-hidden");
 				navigate("#testList");
 				history.active = true;
 				break;
-			case "2":			
-				select(".nav").removeAttribute("data-hidden");
-				select(".nav.right").removeAttribute("data-hidden");
+			case "2":					
 				var admin = document.querySelectorAll(".admin");
 				for (var i = 0; i < admin.length; i++) {
 					admin[i].removeAttribute("data-hidden");
 				}
+				select("#myUserDetail").setAttribute("data-fill-where", "id=" + user_id);
+				select(".nav").removeAttribute("data-hidden");
+				select(".nav.right").removeAttribute("data-hidden");
 				navigate("#testList");
 				history.active = true;
 				break;

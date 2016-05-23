@@ -197,6 +197,9 @@
 		global $args, $current_user, $dbi;
 		if (!permissions::evaluate($args->table, ["id"], array("id" => $args->id), action_delete)) { echoResult(db_error_unauthorized); return; }
 		$result = $dbi->delete_by_id($args->table, $args->id);
+		if ($result == db_success && $args->table == "tests") {
+			$result = $dbi->delete("submissions", "testId=" . $dbi->escape($args->id));
+		}
 		echoResult($result);
 	}
 	

@@ -48,6 +48,7 @@ function submit_dictation(e) {
 	submissionData["text"] = data.text;
 	submissionData["table"] = "submissions";
 	
+	show_message("Palun oodake", "Töötlen teksti");
 	ajax("db_insert", submissionData, function(r) {		
 		show_message("Etteütlus sooritatud!", "Täname osalemise eest.");
 	}, function(r) {

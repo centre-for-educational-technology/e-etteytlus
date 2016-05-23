@@ -129,6 +129,19 @@ body > * {
 	right:15px;
 }
 
+#fountainG {
+	position:absolute;
+	left:50%;
+	top:3%;
+	transform:translateX(-50%);
+	opacity:0;
+	transition:opacity 0.2s;
+}
+
+#fountainG.show {
+	opacity:1;
+}
+
 /* table */
 
 .ascdesc:hover, .sortable:hover, .sortable:hover::after {
@@ -244,10 +257,11 @@ h4 {
 
 table {
 	width:100%;
-	font:12px 'Open Sans';
+	border-collapse: collapse;
 }
 
 th, td {
+	font:12px 'Open Sans';
 	text-align:left;
 	padding:4px;
 	transition: padding 0.3s, font-size 0.3s;

@@ -69,13 +69,17 @@
 			return db_error;
 		}
 		
-		public function delete_by_id($table, $id) {
+		//unprotected, internal use only
+		public function delete($table, $where) {
 			if (!$this->mysqli) return db_error_connect;
 			if (!$this->select_db()) return db_error_db;
-			
-			$sql = "DELETE FROM " . $this->escape($table) . " WHERE id = " . $this->escape($id);
+			$sql = "DELETE FROM " . $this->escape($table) . " WHERE " . $where;
 			if ($this->query($sql)) return db_success;
 			return db_error;
+		}
+		
+		public function delete_by_id($table, $id) {
+			return $this->delete($table, "id=" . $this->escape($id));
 		}
 		
 		//$what is a regular array of column names

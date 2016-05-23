@@ -34,7 +34,7 @@
 		
 		public static function evaluate_test_taker($table, $columns, $where, $action) {
 			if ($action == action_insert) return $table == "submissions";
-			if ($action == action_select) return $table == "test" && $columns == array("dateEnd");
+			if ($action == action_select) return $table == "tests" && $columns == array("dateEnd");
 			return false;
 		}
 		

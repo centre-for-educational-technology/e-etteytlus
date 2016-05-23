@@ -10,6 +10,10 @@ function pad0(s, len) { s = "" + s; while (s.length < len) s = "0" + s; return s
 function unixTime() { return Math.floor(Date.now() / 1000); }
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
+function ajax_anim(state) {
+	select("#fountainG").className = state ? "show" : "";
+}
+
 //method = "method name"
 //obj = {}, optional
 //callback_success, callback_error = function, optional
@@ -18,6 +22,7 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 	//console.log("AJAX: " + method);
 	if (ajax.complete == false) return;		//limits this to 1 concurrent interaction, if greater flexibility is needed in the future, come up with a better solution.
 	ajax.complete = false;
+	ajax_anim(true);
 	if (!isdef(obj)) obj = {};
     var request = new XMLHttpRequest();
 	
@@ -26,6 +31,7 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 		setTimeout(function() {
 			if (ajax.complete) return;
 			ajax.complete = true;
+			ajax_anim(false);
 			safecall(callback_error, {"result":"error_timeout"});
 		}, timeout_ms);
 	}
@@ -35,6 +41,7 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
         if (request.readyState == 4 && request.status == 200) {
 			console.log("RESPONSE: " + request.responseText);	
 			ajax.complete = true;
+			ajax_anim(false);
 			var obj;
 			try {
 				obj = JSON.parse(request.responseText);
@@ -53,6 +60,7 @@ function ajax(method, obj, callback_success, callback_error, timeout_ms) {
 			}
         } else if (request.status == 404) {
 			ajax.complete = true;
+			ajax_anim(false);
 			safecall(callback_error, {"result":"error_404"});
 		}
     };

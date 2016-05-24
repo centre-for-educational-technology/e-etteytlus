@@ -17,3 +17,7 @@ E-etteütlus on veebipõhine rakendus etteütluste läbiviimiseks. Rakenduse abi
 
 1. /user.html or root is used to access the test performer side
 2. /conductor.html or /conductor or /admin is used to access the conductor / administrator side
+
+## Version
+
+1.0.0

@@ -16,9 +16,9 @@ function submit_text(e) {
 		navigate_timeout("#textList", undefined, 2000);
 	}, function(r) {
 		if (r.result == "error_unique") {
-			show_message("Sellise nimega tekst on juba olemas!");	
+			show_message("Sellise nimega tekst on juba olemas!");
 		} else {
-			show_message("Süsteemi viga", "Vabandame.");	
+			show_message("Süsteemi viga", "Vabandame.");
 		}
 		navigate_timeout("#newText", undefined, 4000);
 	});
@@ -78,7 +78,7 @@ function conduct_test(e) {
 	var data = formData(e.target);
 	data["table"] = "tests";
 	data["dateBegin"] = unixTime();
-	data.dateEnd = parseInt(data.dateEnd) * 60 + data.dateBegin; 
+	data.dateEnd = parseInt(data.dateEnd) * 60 + data.dateBegin;
 	ajax("db_update", data, function(r) {
 		navigate("#conductTest", { "data-fill-where" : "id=" + r });
 	}, function(r) {
@@ -178,12 +178,12 @@ function submit_user(e) {
 	}, function(r) {
 		if (r.result == "error_unique") {
 			if (r.arg == "username") {
-				show_message("Sellise kasutajanimega tegelane on juba olemas!");	
+				show_message("Sellise kasutajanimega tegelane on juba olemas!");
 			} else {
 				show_message("Sellise E-posti aadressiga tegelane on juba olemas!");
 			}
 		} else {
-			show_message("Süsteemi viga", "Vabandame.");	
+			show_message("Süsteemi viga", "Vabandame.");
 		}
 		navigate_timeout("#newUser", undefined, 4000);
 	});
@@ -200,7 +200,7 @@ function update_user(e) {
 			navigate_timeout("#myUserDetail", undefined, 2000);
 		} else {
 			navigate_timeout("#userList", undefined, 2000);
-		}	
+		}
 	}, function(r) {
 		show_message("Süsteemi viga", "Vabandame.");
 		navigate_timeout("#userDetail", undefined, 4000);
@@ -233,6 +233,33 @@ function interpret_user_permissions(row) {
 	if (row.permissions == 0) return "Õigusteta";
 	if (row.permissions == 1) return "Juhendaja";
 	if (row.permissions == 2) return "Administraator";
+}
+
+function interpret_date(row) {
+	/**
+	* Takes string or integer and adds zero padding to the left.
+	* @param  {string|int} data   Value to be padded
+	* @param  {int}        length Length to pad until
+	* @return {string}            Zero padded string
+	*/
+	function zero_pad(data, length) {
+		var padder = '0',
+		str = data.toString();
+
+		if ( str.length < length ) {
+			return new Array((length - str.length) + 1).join(padder) + str;
+		}
+
+		return str;
+	}
+	var date = new Date(row.date * 1000);
+
+	return zero_pad(date.getDate(), 2)
+	  + '.' + zero_pad(date.getMonth() + 1, 2)
+	  + '.' + date.getFullYear()
+	  + ' '
+	  + zero_pad(date.getHours(), 2)
+	  + ':' + zero_pad(date.getMinutes(), 2);
 }
 
 
@@ -287,7 +314,7 @@ function start_page() {
 		window["user_id"] = r[0];
 		window["user_permissions"] = r[1];
 		switch (r[1]) {
-			case "1":					
+			case "1":
 				var admin = document.querySelectorAll(".admin");
 				for (var i = 0; i < admin.length; i++) {
 					admin[i].setAttribute("data-hidden", "");
@@ -298,7 +325,7 @@ function start_page() {
 				navigate("#testList");
 				history.active = true;
 				break;
-			case "2":					
+			case "2":
 				var admin = document.querySelectorAll(".admin");
 				for (var i = 0; i < admin.length; i++) {
 					admin[i].removeAttribute("data-hidden");
@@ -317,6 +344,6 @@ function start_page() {
 	}, function(r) {
 		show_message("Süsteemis esinevad hetkel rikked.", "Vabandame.");
 		navigate_timeout("#login", undefined, 4000);
-	});			
+	});
 }
 history.resetTo = history.length;

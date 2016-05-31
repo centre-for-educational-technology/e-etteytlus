@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>E-etteütlus</title>
-		<meta charset="UTF-8"> 	
+		<meta charset="UTF-8">
 		<link rel="stylesheet" href="fountain.css">
 		<link rel="stylesheet" href="general.css">
 		<link rel="stylesheet" href="form.css">
@@ -15,12 +15,12 @@
 		<script src="fountain.js" charset="utf-8"></script>
 		<script src="conductor.js" charset="utf-8"></script>
 	</head>
-	<body>	
-	
+	<body>
+
 		<!-- Text list -->
 		<div id="textList" class="container" data-nav-state="hidden">
 			<div class="w800">
-				<h1>Kontrolltekstid</h1>	
+				<h1>Kontrolltekstid</h1>
 				<table data-fill-table="texts" data-fill-on-rowclick="view_text">
 					<tr data-fill-table-columns-silent="id">
 						<th data-fill-table-columns="title" data-table-sorter>Pealkiri</th>
@@ -31,7 +31,7 @@
 				<button type="button" data-nav="#newText">Lisa Uus</button>
 			</div>
 		</div>
-		
+
 		<!-- Text detail -->
 		<div id="textDetail" class="container" data-fill-table="texts" data-nav-state="hidden">
 			<div class="w800">
@@ -42,11 +42,11 @@
 				<form onsubmit="delete_text(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
-				</form>	
+				</form>
 				<button class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
-		
+
 		<!-- Test list -->
 		<div id="testList" class="container" data-nav-state="hidden">
 			<div class="w800">
@@ -64,7 +64,7 @@
 				<button type="button" data-nav="#newTest">Lisa Uus</button>
 			</div>
 		</div>
-		
+
 		<!-- New text -->
 		<div id="newText" class="container" data-nav-state="hidden">
 			<div class="w800">
@@ -73,13 +73,13 @@
 					<label for="ntxTitle">Pealkiri (ei kuvata vastajatele)</label>
 					<input  type="text" id="ntxTitle" name="title" data-pattern=".{3,}" autocomplete="off" required>
 					<label for="ntxText">Kontrolltekst</label>
-					<textarea name="text" id="ntxText" data-pattern=".{3,}" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>	
+					<textarea name="text" id="ntxText" data-pattern=".{3,}" rows="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
 			</div>
 		</div>
-	
+
 		<!-- New test -->
 		<div id="newTest" class="container" data-nav-state="hidden">
 			<div class="w400">
@@ -91,33 +91,33 @@
 					<input type="text" data-pattern="^(0|[1-9][0-9]*)$" name="duration" value="30" required>
 					<button type="submit">Genereeri kood</button>
 				</form>
-			</div>		
+			</div>
 		</div>
-		
+
 		<!-- Start test -->
 		<div id="startTest" class="container" data-fill-table="tests" data-nav-state="hidden" >
 			<div class="w800">
 				<h1>E-etteütlus "<span data-fill-columns="textName"></span>"</h1>
-				
+
 				<ul>
 					<li>Etteütluse kood on ekraani peal kuvatav neljakohaline number.</li>
 					<li>Etteütluse sooritamiseks peab osavõtja sisestama koodi.</li>
 					<li>Kood kehtib alates "Alusta"-nupul klikkamisest teie poolt määratud ajaperioodi (<span data-fill-columns="dateEnd"></span> Min) lõpuni.</li>
-					<li>Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.</li>		
+					<li>Kirjutage kood suurelt tahvlile, edastage see osajalatele meilitsi või muul moel etteütluse alustamiseks.</li>
 				</ul>
-				
+
 				<h4 data-fill-columns="code"></h1>
-				
+
 				<form onreset="cancel_test(event);" onsubmit="conduct_test(event);">
 					<input type="hidden" name="dateEnd" data-fill-columns="dateEnd" data-fill-targets="value">
-					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">		
+					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Alusta</button>
 					<button type="reset">Tühista</button>
 				</form>
-				
+
 			</div>
 		</div>
-		
+
 		<!-- Conduct test -->
 		<div id="conductTest" class="container" data-fill-table="tests" data-nav-state="hidden">
 			<div class="w800">
@@ -126,16 +126,16 @@
 				<h4 data-fill-columns="code"></h4>
 				<h2>Aega jäänud:</h2>
 				<h4 data-fill-columns="dateEnd" data-fill-targets="data-countdown-end" data-countdown-end="0"></h4>
-				
+
 				<div class="line"></div>
 				<form onsubmit="stop_test(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Lõpeta</button>
-				</form>			
+				</form>
 				<button type="button" data-fill-columns="id" data-fill-targets="onclick" data-fill-interpreter="interpret_conduct_view_details">Esitatud tööd</button>
 			</div>
 		</div>
-		
+
 		<!-- Test detail -->
 		<div id="testDetail" class="container" data-fill-table="tests" data-fill-columns-silent="id" data-nav-state="hidden">
 			<div class="w800" >
@@ -153,11 +153,11 @@
 					<button type="button" class="left" onclick="history.back()">Tagasi</button>
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="submit">Kustuta</button>
-				</form>	
-				
+				</form>
+
 			</div>
 		</div>
-		
+
 		<!-- Submission detail -->
 		<div id="submissionDetail" class="container" data-fill-table="submissions" data-fill-columns-silent="id" data-nav-state="hidden">
 			<div class="w800">
@@ -166,7 +166,7 @@
 					<td>
 						<h2>Nimi: <span data-fill-columns="firstname"></span> <span data-fill-column="surname"></span></h2>
 						<h2>E-post: <span data-fill-columns="email"></span></h2>
-						<h2>Kuupäev: <span data-fill-columns="date"></span></h2>
+						<h2>Kuupäev: <span data-fill-columns="date" data-fill-interpreter="interpret_date"></span></h2>
 						<h2>Kontrolltekst: <span data-fill-columns="textTitle"></span></h2>
 					</td><td>
 						<h2>Vigaseid tähemärke: <span data-fill-columns="faultyLetters"></span></h2>
@@ -174,17 +174,17 @@
 						<h2>Vigaseid lauseid: <span data-fill-columns="faultySentences"></span></h2>
 					</td>
 				</tr></table>
-				
+
 				<h2 data-fill-columns="report"></h2>
 				<div class="line"></div>
 				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
-		
+
 		<!-- User list -->
 		<div id="userList" class="container" data-nav-state="hidden">
 			<div class="w800">
-				<h1>Kasutajad</h1>	
+				<h1>Kasutajad</h1>
 				<table data-fill-table="users" data-fill-on-rowclick="view_user">
 					<tr data-fill-table-columns-silent="id">
 						<th data-fill-table-columns="firstname" data-table-sorter>Eesnimi</th>
@@ -196,7 +196,7 @@
 				<button type="button" data-nav="#newUser">Lisa Uus</button>
 			</div>
 		</div>
-		
+
 		<!-- New user -->
 		<div id="newUser" class="container" data-nav-state="hidden">
 			<div class="w400">
@@ -205,12 +205,12 @@
 					<label for="username2">Kasutaja nimi</label>
 					<input  type="text" id="username2" name="username" data-pattern=".{3,}" autocomplete="off" required>
 					<label for="password2">Parool</label>
-					<input  type="password" id="password2" name="password" data-pattern=".{3,}" autocomplete="off" required>		
+					<input  type="password" id="password2" name="password" data-pattern=".{3,}" autocomplete="off" required>
 					<label for="permissions2">Õigused</label>
 					<select id="permissions2" name="permissions" autocomplete="off" required>
 						<option value="1">Juhendaja</option>
 						<option value="2">Administraator</option>
-					</select>				
+					</select>
 					<label for="firstname2">Eesnimi</label>
 					<input  type="text" id="firstname2" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
 					<label for="surname2">Perenimi</label>
@@ -220,28 +220,28 @@
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
-				
+
 				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
 
 		<!-- User detail -->
 		<div id="userDetail" class="container" data-fill-table="users" data-nav-state="hidden">
-			
+
 			<div class="w400">
 				<h1>Kasutaja detailid</h1>
-				
+
 				<form onsubmit="update_user(event);" onreset="reset_user(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<label for="username3">Kasutaja nimi</label>
 					<input  type="text" id="username3" name="username" data-pattern=".{3,}" data-fill-columns="username" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="password3">Parool</label>
-					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">		
+					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">
 					<label for="permissions3">Õigused</label>
 					<select id="permissions3" name="permissions" data-fill-columns="permissions" data-fill-targets="value, data-old-value" autocomplete="off">
 						<option value="1">Juhendaja</option>
 						<option value="2">Administraator</option>
-					</select>	
+					</select>
 					<label for="firstname3">Eesnimi</label>
 					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="surname3">Perenimi</label>
@@ -251,27 +251,27 @@
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
-				
+
 				<form onreset="delete_user(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="reset">Kustuta</button>
-				</form>		
-				<button type="button" class="left" onclick="history.back()">Tagasi</button>				
+				</form>
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
-		
+
 		<!-- My user detail -->
 		<div id="myUserDetail" class="container" data-fill-table="users" data-nav-state="hidden">
-			
+
 			<div class="w400">
 				<h1>Minu kasutaja</h1>
-				
+
 				<form onsubmit="update_user(event);" onreset="reset_user(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<label for="username3">Kasutaja nimi</label>
 					<input  type="text" id="username3" name="username" data-pattern=".{3,}" data-fill-columns="username" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="password3">Parool</label>
-					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">		
+					<input  type="password" id="password3" name="password" data-pattern=".{3,}" data-old-value="" autocomplete="off">
 					<label for="firstname3">Eesnimi</label>
 					<input  type="text" id="firstname3" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" data-fill-columns="firstname" data-fill-targets="value, data-old-value" autocomplete="off">
 					<label for="surname3">Perenimi</label>
@@ -281,15 +281,15 @@
 					<button type="submit">Salvesta</button>
 					<button type="reset">Tühista</button>
 				</form>
-				
+
 				<form onreset="delete_user(event);">
 					<input type="hidden" name="id" data-fill-columns="id" data-fill-targets="value">
 					<button type="reset">Kustuta</button>
-				</form>		
-				<button type="button" class="left" onclick="history.back()">Tagasi</button>				
+				</form>
+				<button type="button" class="left" onclick="history.back()">Tagasi</button>
 			</div>
 		</div>
-		
+
 		<!-- Message -->
 		<div id="message" class="container" data-nav-state="hidden">
 			<div class="msg">
@@ -297,26 +297,26 @@
 				<h2></h2>
 			</div>
 		</div>
-		
+
 		<!-- Nav -->
-		<div class="nav" data-hidden>		
+		<div class="nav" data-hidden>
 			<label data-nav="#textList">Kontrolltekstid</label>
-			<label data-nav="#testList">Etteütlused</label>	
+			<label data-nav="#testList">Etteütlused</label>
 			<label data-nav="#newText">Uus Kontrolltekst</label>
 			<label data-nav="#newTest">Uus Etteütlus</label>
-			
+
 		</div>
-		<div class="nav right" data-hidden>		
+		<div class="nav right" data-hidden>
 			<label data-nav="#myUserDetail">Minu kasutaja</label>
 			<label class="admin" data-nav="#userList">Kasutajad</label>
 			<label class="admin" data-nav="#newUser">Uus Kasutaja</label>
 			<label onclick="log_out()">Logi välja</label>
 		</div>
-		
+
 		<!-- Log in -->
 		<div id="login" class="container">
 			<div class="w400">
-				<h1>E-etteütlus</h1>			
+				<h1>E-etteütlus</h1>
 				<h3>Logi sisse!</h3>
 				<form onsubmit="log_in(event);">
 					<label for="username">Kasutajanimi või E-post</label>
@@ -324,7 +324,7 @@
 					<label for="password">Parool</label>
 					<input  type="password" id="password" name="password" data-pattern=".{3,}" autocomplete="off" required>
 					<button type="submit">Logi sisse</button>
-				</form>	
+				</form>
 			</div>
 		</div>
 

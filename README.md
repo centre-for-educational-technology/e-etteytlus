@@ -5,6 +5,7 @@ E-etteütlus on veebipõhine rakendus etteütluste läbiviimiseks. Rakenduse abi
 ## Server requirements:
 
 1. PHP 5.6+, PHP 7.0 recommended
+  * Extensions: mbstring, json, mysqli
 2. MySql 5.0+
 
 ## Deployment:

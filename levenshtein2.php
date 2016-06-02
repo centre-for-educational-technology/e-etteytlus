@@ -256,8 +256,8 @@
 		
 
 		public function __construct($control, $sample) {
-			$this->sample = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", $sample)), " "); 	
-			$this->control = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", $control)), " "); 	
+			$this->sample = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", preg_replace('/(\x{201C}|\x{201D}|\x{00AB}|\x{00BB}|\x{201E})/u', '"', $sample))), " ");
+			$this->control = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", preg_replace('/(\x{201C}|\x{201D}|\x{00AB}|\x{00BB}|\x{201E})/u', '"', $control))), " ");
 			$this->distance = levenshtein2::compute($this->control, $this->sample, $this->edits);
 			$this->sampleLen = mb_strlen($this->sample, 'UTF-8');
 			$this->controlLen = mb_strlen($this->control, 'UTF-8');

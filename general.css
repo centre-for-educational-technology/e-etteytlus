@@ -14,7 +14,7 @@ body > * {
 	position:absolute;
 	left:50%;
 	top:50%;
-	transform:translate(-50%, -50%);	
+	transform:translate(-50%, -50%);
 	transition:left 0.3s, opacity 0.2s;
 	transition-delay:0.3s;
 }
@@ -23,12 +23,12 @@ body > * {
 .container {
 	position:absolute;
 	left:0; top:40px;
-	
+
 	width:100%; min-height:90%;
 	display:flex;
 	align-items:center;
 	justify-content:center;
-	
+
 	max-width:10000000px; max-height:10000000px;
 	overflow:hidden;
 	transition:transform 0.3s ease 0.3s, opacity 0.2s ease 0.3s, max-width 0.1s ease 0.2s, max-height 0.1s ease 0.2s;
@@ -44,13 +44,13 @@ body > * {
 	opacity:0;
 	pointer-events:none;
 	transition:transform 0.3s ease 0s, opacity 0.2s ease 0s, max-width 0.1s ease 0.2s, max-height 0.1s ease 0.2s;
-	
-	max-width:0; max-height:0; 
+
+	max-width:0; max-height:0;
 }
-.container[data-nav-state="hiddenAfter"] { 
-	transform:translateX(10%); 
+.container[data-nav-state="hiddenAfter"] {
+	transform:translateX(10%);
 }
-.container[data-nav-state="hiddenBefore"] { 
+.container[data-nav-state="hiddenBefore"] {
 	transform:translateX(-10%);
 }
 
@@ -132,7 +132,7 @@ body > * {
 #fountainG {
 	position:absolute;
 	left:50%;
-	top:3%;
+	top: 50px;
 	transform:translateX(-50%);
 	opacity:0;
 	transition:opacity 0.2s;
@@ -186,7 +186,7 @@ body > * {
 	top:0px;
 	width:85%;
 	background-color:transparent;
-	
+
 	outline:none;
 	border:none;
 	font:12px 'Open Sans';
@@ -217,18 +217,18 @@ p {
 	margin:0;
 	padding:0;
 	border:0;
-	
+
 }
 
 ul li {
 	font:14px 'Open Sans';
-	color:rgb(30,30,30);	
+	color:rgb(30,30,30);
 }
 
 a {
 	font:12px 'Open Sans';
 	text-decoration:none;
-	color:rgb(30,30,120);	
+	color:rgb(30,30,120);
 }
 
 h1 {
@@ -274,7 +274,7 @@ th, td {
 
 th {
 	font-weight:650;
-	background-color:rgb(200,220,255);	
+	background-color:rgb(200,220,255);
 }
 
 tr {
@@ -286,10 +286,10 @@ tr:nth-child(even) {
 	background-color:rgb(255,255,255);
 }
 
-tr:hover { 
+tr:hover {
 	background-color:rgb(230,230,255);
 }
-	
+
 .note {
 	font: 14px 'Open Sans';
 	color:rgb(96,96,96);

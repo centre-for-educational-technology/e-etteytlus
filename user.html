@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<title>E-etteütlus</title>
-		<meta charset="UTF-8"> 	
+		<meta charset="UTF-8">
 		<link rel="stylesheet" href="fountain.css">
 		<link rel="stylesheet" href="general.css">
 		<link rel="stylesheet" href="form.css">
-		<link rel="stylesheet" href="user.css">		
+		<link rel="stylesheet" href="user.css">
 		<script src="util.js" charset="utf-8"></script>
 		<script src="fill.js" charset="utf-8"></script>
 		<script src="nav.js" charset="utf-8"></script>
@@ -15,26 +15,26 @@
 		<script src="user.js" charset="utf-8"></script>
 	</head>
 	<body>
-		
+
 		<!-- user info -->
 		<div id="user_info" class="container" data-nav-state="hidden">
 			<div class="w400">
-				<h1>E-etteütlus</h1>			
+				<h1>E-etteütlus</h1>
 				<h3>Täida palun kõik väljad!</h3>
 				<form onsubmit="submit_user_info(event);">
 					<label for="firstname">Eesnimi</label>
-					<input  type="text" id="firstname" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required autofocus>
+					<input  type="text" id="firstname" name="firstname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ -]+$" autocomplete="off" required autofocus>
 					<label for="surname">Perenimi</label>
-					<input  type="text" id="surname" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ]+$" autocomplete="off" required>
+					<input  type="text" id="surname" name="surname" data-pattern="^[A-zäöõüåšžÄÖÕÜÅŠŽ -]+$" autocomplete="off" required>
 					<label for="email">E-posti aadress</label>
 					<input  type="email" id="email" name="email" data-pattern=".@." autocomplete="off" required>
 					<label for="code">Etteütluse kood</label>
 					<input  type="text" id="code" name="code" data-pattern="^[0-9]{4}" autocomplete="off" required>
 					<button type="submit">Alusta</button>
-				</form>				
-			</div>	
+				</form>
+			</div>
 		</div>
-		
+
 		<!-- dictation -->
 		<div id="dictation" class="container" data-nav-state="hidden">
 			<div class="w800">
@@ -50,7 +50,7 @@
 				</form>
 			</div>
 		</div>
-		
+
 		<!-- Message -->
 		<div id="message" class="container" data-nav-state="hidden">
 			<div class="msg">
@@ -59,8 +59,7 @@
 			</div>
 		</div>
 
-		
+
 		<script type="text/javascript">navigate("#user_info");</script>
 	</body>
 </html>
-

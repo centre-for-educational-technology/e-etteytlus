@@ -24,6 +24,10 @@ $where = [
 $results = [];
 $result = submission::db_select($columns, $where, $results);
 
+if ( $result !== db_success ) {
+  exit('Database Error. Please contact your administrative user.');
+}
+
 $fp = fopen('php://memory', 'w');
 
 fputcsv($fp, ['nimi', 'e-post', 'kuupäev', 'vigased tähemärgid', 'vigased sõnad', 'vigased laused', 'tähemärgid kokku', 'sõnad kokku', 'laused kokku', 'tulemus protsentides']);

@@ -213,11 +213,12 @@ body > * {
 }
 
 p {
-	display:inline;
-	margin:0;
+	/* display:inline; */
+	/* margin:0; */
 	padding:0;
 	border:0;
-
+	font: 14px 'Open Sans';
+	color:rgb(96,96,96);
 }
 
 ul li {

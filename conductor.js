@@ -138,6 +138,16 @@ function interpret_conduct_view_details(row) {
 	return "navigate('#testDetail', {'data-fill-where' : 'id=" + row.id + "'})";
 }
 
+function interpret_csv_download(row) {
+	return '<a href="" title="Lae alla" onmouseup="start_csv_download(event);" onclick="return false;" data-id="' + row.id + '">Lae alla</a>';
+}
+
+function start_csv_download(event) {
+	event.bubbles = false;
+	event.cancelBubble = true;
+	window.open('csv.php?id=' + event.target.getAttribute('data-id'), '_blank');
+}
+
 //	***************
 //	  SUBMISSIONS
 //	***************

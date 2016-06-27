@@ -141,7 +141,7 @@
 		}
 		
 		public static function isPunctuation($c) {
-			return preg_match("/[^A-zäöõüåðþÄÖÕÜÅÐÞ]/", $c);
+			return preg_match("/[^A-zÃ¤Ã¶ÃµÃ¼Ã¥Å¡Å¾Ã„Ã–Ã•ÃœÃ…Å Å½]/", $c);
 		}
 		
 		public static function isSentenceEnder($c) {
@@ -152,18 +152,17 @@
 			$this->faultyLetters = 0;
 			$this->faultyWords = 0;
 			$this->faultySentences = 0;
-			$this->totalLetters = 0;
-			$this->totalWords = 0;
-			$this->totalSentences = 0;
+	
 			$lastPunctuation = !static::isPunctuation(mb_substr($this->sample, 0, 1, 'UTF-8'));
 			$lastSentenceEnder = true;
+			$sampleLetters = 0;
 			
 			$map = [];
 			
 			//mark + count letter faults and mark word + sentence bounds
 			for ($i = 0; $i < $this->editsLen; $i++) {
 				$edit = &$this->edits[$i];
-				$block = new diffBlock(($edit == levenshtein2::FLAG_INSERT) ? " " : mb_substr($this->sample, $this->totalLetters++, 1, 'UTF-8'));
+				$block = new diffBlock(($edit == levenshtein2::FLAG_INSERT) ? " " : mb_substr($this->sample, $sampleLetters++, 1, 'UTF-8'));
 							
 				if ($edit != levenshtein2::FLAG_OK) {
 					$this->faultyLetters++;
@@ -198,12 +197,10 @@
 				if (hasFlag($block->flags, static::FLAG_WORD_BEGIN)) {
 					$faultyWord = false;
 					$wordBegin = $i;
-					$this->totalWords++;
 				}
 				if (hasFlag($block->flags, static::FLAG_SENTENCE_BEGIN)) {
 					$faultySentence = false;
 					$sentenceBegin = $i;
-					$this->totalSentences++;
 				}
 				
 				if (hasFlag($block->flags, static::FLAG_FAULTY_LETTER)) {
@@ -254,10 +251,31 @@
 			return $html;
 		}
 		
+		public function countControlTotals() {
+			$this->totalLetters = mb_strlen($this->control, 'UTF-8');
+			$this->totalWords = 1;
+			$this->totalSentences = 1;
+			$inWord = true;
+			
+			for ($i = 0; $i < $this->totalLetters - 1; $i++) {
+				$c = mb_substr($this->control, $i, 1, 'UTF-8');
+				
+				if (static::isPunctuation($c)) {
+					if ($inWord) {
+						$inWord = false;
+						$this->totalWords++;
+						if (static::isSentenceEnder($c)) $this->totalSentences++;
+					}
+				} else {
+					$inWord = true;
+				}
+			}
+		}
 
 		public function __construct($control, $sample) {
 			$this->sample = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", preg_replace('/(\x{201C}|\x{201D}|\x{00AB}|\x{00BB}|\x{201E})/u', '"', $sample))), " ");
 			$this->control = trim(preg_replace('/\s+/', ' ', preg_replace("/[\n\r]/", "", preg_replace('/(\x{201C}|\x{201D}|\x{00AB}|\x{00BB}|\x{201E})/u', '"', $control))), " ");
+			$this->countControlTotals();
 			$this->distance = levenshtein2::compute($this->control, $this->sample, $this->edits);
 			$this->sampleLen = mb_strlen($this->sample, 'UTF-8');
 			$this->controlLen = mb_strlen($this->control, 'UTF-8');

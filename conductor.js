@@ -157,7 +157,11 @@ function view_submission(row) {
 }
 
 function interpret_submission_result(row) {
-	var resultPerc = Math.floor((row.totalLetters - row.faultyLetters) / row.totalLetters * 100) + "%";
+	var resultPerc = ( row.totalWords - row.faultyWords ) / row.totalWords * 100;
+	if ( resultPerc % 1 !== 0 ) {
+		resultPerc = resultPerc.toFixed(1);
+	}
+	resultPerc += "%";
 	var resultRep = "<table class='nsel'>";
 	resultRep += "<tr><td>Vigaseid tähemärke:</td><td>" + row.faultyLetters + " / " + row.totalLetters + "</td>";
 	resultRep += "<tr><td>Vigaseid sõnu:</td><td>" + row.faultyWords + " / " + row.totalWords + "</td>";

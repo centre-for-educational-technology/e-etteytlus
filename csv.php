@@ -36,7 +36,7 @@ if ( sizeof($results) > 0 ) {
   foreach($results as $single) {
     $fullname = $single->firstname . ' ' . $single->surname;
     $formatted_date = strftime('%d.%m.%Y %H:%M', $single->date);
-    $percentage = floor( ($single->totalLetters - $single->faultyLetters) / $single->totalLetters * 100 );
+    $percentage = round( ($single->totalWords - $single->faultyWords) / $single->totalWords * 100, 1, PHP_ROUND_HALF_UP );
     fputcsv($fp, [$fullname, $single->email, $formatted_date, $single->faultyLetters, $single->faultyWords, $single->faultySentences, $single->totalLetters, $single->totalWords, $single->totalSentences, $percentage ]);
   }
 }

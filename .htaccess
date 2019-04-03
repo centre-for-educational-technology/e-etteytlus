@@ -1,6 +1,7 @@
 DirectoryIndex user.html
 
 RewriteEngine On
+RewriteBase /e-etteytlus/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule admin conductor.html [NC,L]
 RewriteCond %{REQUEST_FILENAME} !-f

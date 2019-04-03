@@ -58,7 +58,7 @@
 	//test submission model
 	class submission extends base {
 		public static $table_name = "submissions";
-		public $id, $firstname, $surname, $email, $date, $testId, $testCode, $textId, $textTitle, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters;		
+		public $id = 0, $firstname, $surname, $email, $date, $testId, $testCode, $textId, $textTitle, $report, $totalSentences, $totalWords, $totalLetters, $faultySentences, $faultyWords, $faultyLetters;		
 		
 		public static function db_select($columns, $where, &$results) {
 			$result = parent::db_select($columns, $where, $results);
@@ -129,13 +129,13 @@
 	//control text model
 	class text extends base {
 		public static $table_name = "texts";
-		public $id, $title, $text, $authorId, $authorName, $public;
+		public $id = 0, $title, $text, $authorId, $authorName, $public;
 	}
 	
 	//test model
 	class test extends base {
 		public static $table_name = "tests";
-		public $id, $code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public;
+		public $id = 0, $code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public;
 
 		public static function db_select_by_code($code, &$resultValue) {
 			$result = static::db_select(["*"], array("code"=>$code), $results);

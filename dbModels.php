@@ -135,7 +135,7 @@
 	//test model
 	class test extends base {
 		public static $table_name = "tests";
-		public $id = 0, $code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public;
+		public $id = 0, $code, $conductorId, $conductorName, $textId, $textName, $dateBegin, $dateEnd, $submissions, $public = 0;
 
 		public static function db_select_by_code($code, &$resultValue) {
 			$result = static::db_select(["*"], array("code"=>$code), $results);
@@ -195,7 +195,7 @@
 			dateBegin INT,
 			dateEnd INT,
 			submissions INT,
-			public BIT
+			public TINYINT
 		)")) return "Failed to create test table. " . $dbi->mysqli->error;
 		
 		if (!$dbi->query("CREATE TABLE " . submission::$table_name . " (
